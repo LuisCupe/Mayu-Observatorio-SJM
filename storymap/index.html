@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuando la quebrada despierta | Mayu</title>
+<meta name="author" content="Luis Angel Cupe Espinoza, Mayra Marzano Mejia, Gabriela Taipe Bendezu, Mabel Cris Farfan Tipo">
+<meta name="description" content="El Niño costero, los huaicos y San José de Los Molinos (Ica): la quebrada La Yesera y las personas que viven a su lado. Mayu: Observatorio de los Ríos frente al Niño.">
+<meta name="theme-color" content="#0E7C86">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 6C25 15 11 28 11 41a21 21 0 0 0 42 0C53 28 39 15 32 6z' fill='%230E7C86'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+/* =========================================================================
+   1. Base
+   ========================================================================= */
+:root{
+  --t-xs:13px; --t-s:15.5px; --t-m:17.5px; --t-l:20px;
+  --papel:#FFFFFF; --niebla:#F2F5F6; --niebla-2:#E7EDEF; --linea:#DCE3E6;
+  --tinta:#15232B; --tinta-2:#3E4F59; --gris:#6F8089;
+  --teal:#0E7C86; --teal-2:#0A5F67; --teal-claro:#D7EEF0;
+  --arena:#C9A36A; --alerta:#C23B3B; --naranja:#E08A2E;
+  --noche:#0E1A20; --noche-2:#16262E;
+  --sans:"Libre Franklin", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --ancho:700px; --ancho-amplio:1180px; --nav:56px;
+  --ease:cubic-bezier(.22,.7,.2,1);
+  --mayu:#0E7C86; --mayu-2:#5FC6D0; --mayu-visor:#0B2329; --mayu-eye:#C8F6FA;
+}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; scroll-padding-top:calc(var(--nav) + 12px); -webkit-text-size-adjust:100%; }
+body{ margin:0; background:var(--papel); color:var(--tinta); font:400 19px/1.65 var(--serif); font-optical-sizing:auto; overflow-x:hidden; }
+img, video{ max-width:100%; display:block; }
+a{ color:var(--teal-2); text-decoration-thickness:1px; text-underline-offset:3px; }
+a:hover{ color:var(--teal); }
+h1,h2,h3,h4{ font-family:var(--sans); color:var(--tinta); line-height:1.12; margin:0; letter-spacing:-.01em; }
+button{ font:inherit; }
+:focus-visible{ outline:3px solid var(--naranja); outline-offset:2px; border-radius:4px; }
+.sr{ position:absolute!important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.kicker{ font:700 12.5px/1.3 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--teal); }
+.ico{ width:1em; height:1em; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+.num{ font-variant-numeric:tabular-nums lining-nums; }
+.amplio{ max-width:var(--ancho-amplio); margin:0 auto; padding:0 24px; }
+.seccion{ padding:110px 0; }
+.seccion.gris{ background:var(--niebla); }
+.cabeza{ max-width:var(--ancho); margin:0 auto 44px; padding:0 24px; }
+.cabeza h2{ font-size:clamp(34px, 4.6vw, 52px); font-weight:800; margin:10px 0 14px; text-wrap:balance; }
+.cabeza .bajada{ font:400 var(--t-l)/1.5 var(--serif); color:var(--tinta-2); margin:0; }
+.cabeza.centro{ text-align:center; }
+
+/* =========================================================================
+   2. Barra de navegación
+   ========================================================================= */
+#nav{ position:fixed; z-index:1000; inset:0 0 auto; height:var(--nav); display:flex; align-items:center; gap:18px; padding:0 18px;
+  background:rgba(255,255,255,.94); backdrop-filter:saturate(1.4) blur(10px); -webkit-backdrop-filter:saturate(1.4) blur(10px);
+  border-bottom:1px solid var(--linea); transform:translateY(-100%); transition:transform .45s var(--ease); }
+#nav.on{ transform:none; }
+#nav .marca{ display:flex; align-items:center; gap:9px; text-decoration:none; color:var(--tinta); font:800 15px/1 var(--sans); white-space:nowrap; }
+#nav .marca small{ display:block; font:500 11px/1.2 var(--sans); color:var(--gris); }
+#nav ol{ list-style:none; display:flex; gap:4px; margin:0 0 0 auto; padding:0; overflow-x:auto; scrollbar-width:none; }
+#nav ol::-webkit-scrollbar{ display:none; }
+#nav ol a{ display:block; padding:8px 11px; border-radius:20px; font:600 13.5px/1 var(--sans); color:var(--tinta-2); text-decoration:none; white-space:nowrap; }
+#nav ol a:hover{ background:var(--niebla); color:var(--tinta); }
+#nav ol a.activo{ background:var(--teal); color:#fff; }
+#progreso{ position:absolute; left:0; bottom:-1px; height:3px; width:100%; background:var(--teal); transform-origin:0 50%; transform:scaleX(0); }
+@media (max-width:760px){ #nav .marca > span:last-child{ display:none; } #nav{ gap:8px; padding:0 8px 0 12px; } #nav ol a{ padding:8px 9px; font-size:13px; } }
+
+/* =========================================================================
+   3. Portada
+   ========================================================================= */
+#portada{ position:relative; height:100vh; min-height:620px; overflow:hidden; background:var(--noche); color:#fff; }
+#portada .foto{ position:absolute; inset:0; }
+#portada .foto img{ width:100%; height:100%; object-fit:cover; object-position:50% 45%; animation:kenburns 26s ease-out both; }
+@keyframes kenburns{ from{ transform:scale(1.14); } to{ transform:scale(1); } }
+#portada::after{ content:""; position:absolute; inset:0; background:
+  linear-gradient(180deg, rgba(8,18,22,.55) 0%, rgba(8,18,22,0) 28%),
+  linear-gradient(0deg, rgba(8,18,22,.92) 0%, rgba(8,18,22,.5) 40%, rgba(8,18,22,0) 70%); }
+#portada .contenido{ position:absolute; z-index:2; left:0; right:0; bottom:0; padding:0 6vw 10vh; max-width:1100px; }
+#portada .sello{ position:absolute; z-index:2; top:22px; left:6vw; display:flex; align-items:center; gap:10px; font:700 13px/1.25 var(--sans); }
+#portada .sello small{ display:block; font-weight:500; opacity:.8; }
+#portada .kicker{ color:#9FE3E9; }
+#portada h1{ color:#fff; font-size:clamp(48px, 8.8vw, 116px); font-weight:900; letter-spacing:-.035em; line-height:.94; margin:14px 0 22px; text-wrap:balance; }
+#portada .bajada{ font:400 clamp(19px, 2.1vw, 24px)/1.45 var(--serif); max-width:640px; margin:0 0 24px; color:rgba(255,255,255,.92); }
+#portada .alerta{ display:inline-flex; align-items:center; gap:10px; padding:9px 15px 9px 12px; border-radius:30px; background:rgba(194,59,59,.92); font:700 14px/1.2 var(--sans); color:#fff; text-decoration:none; }
+#portada .alerta:hover{ background:var(--alerta); color:#fff; }
+#portada .alerta i{ width:9px; height:9px; border-radius:50%; background:#fff; animation:pulso 1.6s infinite; }
+@keyframes pulso{ 0%{ box-shadow:0 0 0 0 rgba(255,255,255,.8); } 100%{ box-shadow:0 0 0 12px rgba(255,255,255,0); } }
+.bajar{ position:absolute; z-index:2; left:50%; bottom:26px; transform:translateX(-50%); width:42px; height:42px; border-radius:50%; border:1.5px solid rgba(255,255,255,.6); display:grid; place-items:center; color:#fff; animation:flota 2.4s ease-in-out infinite; }
+@keyframes flota{ 50%{ transform:translate(-50%, 7px); } }
+@media (max-width:760px){ .bajar{ width:36px; height:36px; bottom:16px; } #portada .contenido{ padding-bottom:72px; } }
+
+/* =========================================================================
+   4. Mapa con tarjetas flotantes (Leaflet)
+   ========================================================================= */
+.sc-mapa{ position:relative; background:var(--noche); }
+.sc-fondo{ position:sticky; top:0; height:100vh; isolation:isolate; }
+#mapa-sc, #tour-mapa{ width:100%; height:100%; background:#1d2b31; }
+.sc-pasos{ position:relative; margin-top:-100vh; pointer-events:none; z-index:5; }
+.dock-medio{ isolation:isolate; }
+.sc-paso{ min-height:100vh; display:flex; align-items:center; padding:0 5vw; }
+.tarjeta{ pointer-events:auto; max-width:380px; background:rgba(255,255,255,.97); border-radius:14px; padding:24px 26px 20px; box-shadow:0 24px 50px -20px rgba(0,0,0,.55); }
+.tarjeta h3{ font-size:24px; font-weight:800; margin:8px 0 10px; }
+.tarjeta p{ font-size:var(--t-m); line-height:1.55; margin:0 0 .6em; }
+.tarjeta .gran{ font:900 44px/1 var(--sans); letter-spacing:-.03em; color:var(--alerta); margin:6px 0 4px; }
+.tarjeta .gran small{ font-size:var(--t-s); font-weight:700; letter-spacing:0; color:var(--tinta-2); margin-left:6px; }
+.tarjeta .clave{ display:flex; flex-wrap:wrap; gap:8px 14px; margin:12px 0 2px; font:500 var(--t-xs)/1.3 var(--sans); color:var(--tinta-2); }
+.tarjeta .clave span{ display:inline-flex; align-items:center; gap:6px; }
+.tarjeta .clave i{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+.tarjeta .clave i.sq{ border-radius:2px; }
+.sc-paso.explorar{ align-items:flex-start; padding-top:calc(var(--nav) + 18px); }
+.sc-paso.explorar .tarjeta{ max-width:360px; }
+.mapa-aviso{ position:absolute; inset:0; display:none; place-items:center; color:#C9D6DB; font:500 15px/1.5 var(--sans); text-align:center; padding:30px; }
+.sin-mapa .mapa-aviso{ display:grid; }
+@media (max-width:760px){
+  .sc-paso{ align-items:flex-end; padding:0 12px 6vh; }
+  .tarjeta{ padding:18px 20px 14px; max-width:none; }
+  .tarjeta h3{ font-size:21px; } .tarjeta p{ font-size:16px; } .tarjeta .gran{ font-size:38px; }
+  .sc-paso.explorar{ align-items:flex-end; }
+}
+.leaflet-container{ font-family:var(--sans); }
+.etq-mapa{ background:none; border:0; box-shadow:none; color:#fff; font:700 13px/1.15 var(--sans); text-shadow:0 0 3px #000, 0 0 6px #000, 0 1px 2px #000; padding:0; white-space:nowrap; }
+.etq-mapa.grande{ font-size:16px; letter-spacing:.02em; }
+.etq-mapa.chica{ font-size:11.5px; font-weight:600; }
+.etq-mapa::before{ display:none; }
+.leaflet-tooltip.tt{ font:500 13px/1.4 var(--sans); border-radius:8px; padding:8px 10px; max-width:280px; white-space:normal; }
+.leaflet-popup-content{ font:400 14px/1.5 var(--sans); margin:14px 16px; }
+.leaflet-popup-content h4{ font-size:15px; margin:0 0 6px; }
+.leaflet-popup-content .nivel{ display:inline-block; padding:2px 8px; border-radius:10px; color:#fff; font:700 11.5px/1.5 var(--sans); }
+.leaflet-popup-content dl{ display:grid; grid-template-columns:auto 1fr; gap:2px 10px; margin:8px 0 0; font-size:13px; }
+.leaflet-popup-content dt{ color:var(--gris); }
+.leaflet-popup-content dd{ margin:0; }
+/* simbología de capas */
+.ico-ly{ display:inline-grid; place-items:center; width:22px; height:22px; flex:none; }
+.ico-ly svg{ width:22px; height:22px; overflow:visible; }
+.tarjeta .clave{ gap:8px 16px; }
+.tarjeta .clave span{ gap:7px; }
+.tarjeta .clave .ico-ly, .tarjeta .clave .ico-ly svg{ width:18px; height:18px; }
+.mk{ position:absolute; transform:translate(-50%, -50%); line-height:0; filter:drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+.mk.tri{ transform:translate(-50%, -62%); }
+.mk svg{ overflow:visible; }
+.pill{ position:absolute; transform:translate(-50%, -50%); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; background:rgba(255,255,255,.96); border-radius:12px; padding:4px 10px 4px 6px; font:700 11.5px/1 var(--sans); color:var(--tinta); box-shadow:0 2px 8px rgba(0,0,0,.4); pointer-events:none; }
+.pill i{ width:4px; height:13px; border-radius:2px; }
+.lugar-mk{ position:absolute; transform:translate(-50%, -50%); white-space:nowrap; color:#fff; font:800 15px/1.1 var(--sans); letter-spacing:.03em; text-shadow:0 0 3px #000, 0 0 8px rgba(0,0,0,.9), 0 1px 2px #000; pointer-events:none; }
+.lugar-mk.mayus{ text-transform:uppercase; font-size:12.5px; letter-spacing:.14em; }
+.lugar-mk.chico{ font-size:12px; font-weight:700; }
+.ly{ margin-top:12px; }
+.ly label{ display:grid; grid-template-columns:24px 1fr auto 38px; gap:10px; align-items:center; padding:7px 2px; border-bottom:1px solid var(--linea); font:500 14px/1.25 var(--sans); color:var(--tinta); cursor:pointer; }
+.ly label:last-child{ border-bottom:0; }
+.ly .n{ font:600 12.5px/1 var(--sans); color:var(--gris); font-variant-numeric:tabular-nums; }
+.ly input{ -webkit-appearance:none; appearance:none; width:38px; height:22px; margin:0; border-radius:11px; background:#C9D3D7; position:relative; cursor:pointer; transition:background .2s; }
+.ly input::after{ content:""; position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .2s var(--ease); }
+.ly input:checked{ background:var(--teal); }
+.ly input:checked::after{ transform:translateX(16px); }
+.ly-sub{ font:700 11.5px/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--gris); margin:14px 0 4px; }
+.ly-sep{ border-top:1px dashed var(--linea); margin:6px 0; }
+@media (max-width:760px){ .ly{ max-height:30vh; overflow-y:auto; } .sc-paso.explorar{ padding-bottom:88px; } }
+.num-marca{ width:34px; height:34px; border-radius:50%; background:var(--tinta); color:#fff; border:2.5px solid #fff; display:grid; place-items:center; font:800 15px/1 var(--sans); box-shadow:0 4px 12px rgba(0,0,0,.45); transition:transform .3s var(--ease), background .3s; }
+.num-marca.on{ background:var(--alerta); transform:scale(1.25); }
+.obra-marca{ width:16px; height:16px; background:var(--teal); border:2px solid #fff; transform:rotate(45deg); box-shadow:0 2px 6px rgba(0,0,0,.5); }
+
+/* =========================================================================
+   5. La quebrada: imagen y ficha con iconos
+   ========================================================================= */
+.ficha{ display:grid; grid-template-columns:1.2fr 1fr; gap:44px; align-items:center; }
+.ficha .lienzo{ position:relative; border-radius:14px; overflow:hidden; box-shadow:0 30px 60px -30px rgba(14,26,32,.45); cursor:zoom-in; }
+.ficha .lienzo img{ width:100%; aspect-ratio:1922/1352; object-fit:cover; transition:transform .8s var(--ease); }
+.ficha .lienzo:hover img{ transform:scale(1.03); }
+.lupa{ position:absolute; right:12px; bottom:12px; background:rgba(14,26,32,.78); color:#fff; border-radius:20px; padding:7px 12px; font:600 12.5px/1 var(--sans); display:flex; gap:6px; align-items:center; }
+.datos{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.dato{ background:var(--papel); border:1px solid var(--linea); border-radius:14px; padding:18px 18px 16px; }
+.dato .ico{ font-size:28px; color:var(--teal); margin-bottom:10px; }
+.dato h3{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gris); font-weight:700; margin-bottom:6px; }
+.dato .grande{ font:800 26px/1.05 var(--sans); color:var(--tinta); letter-spacing:-.02em; margin-bottom:4px; }
+.dato p{ font:400 var(--t-s)/1.45 var(--sans); color:var(--tinta-2); margin:0; }
+.dato.alerta .ico, .dato.alerta .grande{ color:var(--alerta); }
+@media (max-width:900px){ .ficha{ grid-template-columns:1fr; } }
+@media (max-width:420px){ .datos{ grid-template-columns:1fr; } }
+
+/* =========================================================================
+   6. El Niño: panel acoplado (texto + medio fijo)
+   ========================================================================= */
+.dock{ display:grid; grid-template-columns:minmax(340px, 40%) 1fr; background:var(--noche); color:#E9F0F2; }
+.dock-texto{ padding:0 48px; }
+.dock-paso{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:12vh 0; opacity:.35; transition:opacity .5s; }
+.dock-paso.activo{ opacity:1; }
+.dock-paso .kicker{ color:#7FD6DE; }
+.dock-paso h3{ color:#fff; font-size:clamp(30px, 3vw, 38px); font-weight:800; margin:10px 0 14px; }
+.dock-paso p{ margin:0 0 1em; color:#D3DEE2; font-size:var(--t-m); }
+.dock-paso b{ color:#fff; }
+.trio{ display:grid; gap:10px; margin:8px 0 0; }
+.trio div{ display:grid; grid-template-columns:124px 1fr; gap:14px; align-items:center; padding:14px 0; border-top:1px solid rgba(255,255,255,.12); }
+.trio strong{ font:900 32px/1 var(--sans); white-space:nowrap; color:#7FD6DE; letter-spacing:-.02em; }
+.trio div.rojo strong{ color:#FF8A80; }
+.trio span{ font:500 var(--t-s)/1.4 var(--sans); color:#D3DEE2; }
+.dock-medio{ position:sticky; top:0; height:100vh; overflow:hidden; background:#000; }
+.marco{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:opacity .7s var(--ease), visibility 0s .7s; }
+.marco.on{ opacity:1; visibility:visible; transition:opacity .7s var(--ease); }
+.marco video{ width:100%; height:100%; object-fit:contain; background:#000; }
+.marco .rotulo{ position:absolute; left:20px; top:20px; padding:9px 13px; border-radius:8px; background:rgba(0,0,0,.6); font:700 14px/1.35 var(--sans); color:#fff; max-width:70%; }
+.marco .rotulo small{ display:block; font-weight:500; font-size:var(--t-xs); color:rgba(255,255,255,.75); }
+.marco.grafico{ background:#0b1418; padding:48px 40px; }
+@media (max-width:900px){
+  .dock{ grid-template-columns:1fr; }
+  .dock-medio{ order:-1; top:var(--nav); height:44vh; z-index:2; }
+  .dock-texto{ padding:0 20px; }
+  .dock-paso{ min-height:auto; justify-content:flex-start; padding:5vh 0 34vh; }
+  .marco.grafico{ padding:16px 10px; }
+  .trio div{ grid-template-columns:100px 1fr; }
+  .trio strong{ font-size:26px; }
+}
+.graf{ width:100%; max-width:820px; }
+.graf h4{ color:#fff; font-size:18px; font-weight:700; margin-bottom:4px; }
+.graf .sub{ font:400 var(--t-xs)/1.4 var(--sans); color:#9FB2BA; margin-bottom:12px; }
+.graf svg{ width:100%; height:auto; overflow:visible; }
+.graf .eje text{ fill:#9FB2BA; font:500 12px var(--sans); }
+.graf .eje line{ stroke:rgba(255,255,255,.12); }
+.graf .ley{ display:flex; gap:18px; flex-wrap:wrap; font:500 14px/1.2 var(--sans); color:#D3DEE2; margin-top:10px; }
+.graf .ley i{ display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:7px; vertical-align:-1px; }
+.graf .temporada{ fill:rgba(224,138,46,.12); }
+.graf .rot-temp{ fill:#F2B36B; font:700 12px var(--sans); letter-spacing:.08em; }
+
+/* =========================================================================
+   7. Comparador: dos peligros, antes y con El Niño
+   ========================================================================= */
+.swipe-sec{ background:var(--noche); color:#E9F0F2; padding:100px 0 104px; }
+.swipe-sec .cabeza h2{ color:#fff; }
+.swipe-sec .cabeza .bajada{ color:#C9D6DB; }
+.swipe-sec .kicker{ color:#7FD6DE; }
+.pestanas{ display:flex; justify-content:center; gap:6px; margin:0 auto 22px; padding:5px; width:max-content; max-width:100%; background:rgba(255,255,255,.07); border-radius:40px; }
+.pestanas button{ border:0; border-radius:32px; padding:11px 20px; background:none; color:#C9D6DB; font:700 15px/1 var(--sans); cursor:pointer; display:flex; gap:8px; align-items:center; white-space:nowrap; }
+.pestanas button[aria-selected="true"]{ background:#fff; color:var(--tinta); }
+.comparador{ display:grid; grid-template-columns:minmax(0, 620px) 300px; gap:36px; justify-content:center; align-items:center; }
+.swipe{ position:relative; width:100%; aspect-ratio:1400/1980; max-height:82vh; margin:0 auto; border-radius:12px; overflow:hidden; background:#cfe3ef; touch-action:pan-y; user-select:none; -webkit-user-select:none; box-shadow:0 30px 70px -30px #000; }
+.swipe .capa{ position:absolute; inset:0; overflow:hidden; }
+.swipe .capa img{ width:100%; height:100%; object-fit:contain; transition:transform .9s var(--ease), opacity .4s; transform-origin:47.6% 73.8%; }
+.swipe.zoom .capa img{ transform:scale(3.2); }
+.swipe.cambia .capa img{ opacity:0; }
+.swipe .izq{ clip-path:inset(0 calc(100% - var(--x, 50%)) 0 0); }
+.swipe .barra{ position:absolute; top:0; bottom:0; left:var(--x, 50%); width:3px; margin-left:-1.5px; background:#fff; box-shadow:0 0 0 1px rgba(0,0,0,.25); pointer-events:none; }
+.swipe .asa{ position:absolute; top:50%; left:50%; width:48px; height:48px; margin:-24px 0 0 -24px; border-radius:50%; background:#fff; color:var(--tinta); display:grid; place-items:center; box-shadow:0 6px 18px rgba(0,0,0,.35); }
+.swipe .etq{ position:absolute; top:14px; padding:7px 12px; border-radius:6px; font:700 13px/1.2 var(--sans); color:#fff; pointer-events:none; }
+.swipe .etq.l{ left:14px; background:rgba(14,26,32,.85); }
+.swipe .etq.r{ right:14px; background:rgba(194,59,59,.92); }
+.swipe input[type=range]{ position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:ew-resize; margin:0; }
+.lectura-mapa h3{ color:#fff; font-size:24px; font-weight:800; margin:8px 0 12px; }
+.lectura-mapa p{ color:#C9D6DB; font-size:var(--t-m); margin:0 0 18px; }
+.escala{ display:flex; height:10px; border-radius:5px; overflow:hidden; margin:6px 0 6px; }
+.escala i{ flex:1; }
+.escala-txt{ display:flex; justify-content:space-between; font:600 var(--t-xs)/1 var(--sans); color:#9FB2BA; margin-bottom:22px; }
+.boton{ display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:30px; border:1.5px solid rgba(189,236,240,.6); background:transparent; color:#BDECF0; font:700 15px/1 var(--sans); cursor:pointer; text-decoration:none; }
+.boton:hover{ background:rgba(255,255,255,.08); color:#fff; }
+.botones{ display:flex; flex-wrap:wrap; gap:10px; }
+@media (max-width:560px){ .pestanas button{ padding:10px 13px; font-size:14px; } }
+@media (max-width:900px){ .comparador{ grid-template-columns:1fr; } .swipe{ max-width:520px; } .lectura-mapa{ max-width:520px; margin:0 auto; } }
+
+/* =========================================================================
+   8. Recorrido guiado
+   ========================================================================= */
+.tour{ display:grid; grid-template-columns:1.3fr 1fr; height:calc(100vh - var(--nav)); min-height:600px; border-top:1px solid var(--linea); border-bottom:1px solid var(--linea); }
+.tour-mapa{ position:relative; min-height:520px; isolation:isolate; }
+.tour-mapa #tour-mapa{ position:absolute; inset:0; height:auto; }
+.tour-panel{ display:grid; grid-template-rows:minmax(180px, 1fr) auto auto; min-height:0; background:var(--papel); overflow:hidden; }
+.tour-foto{ position:relative; min-height:0; background:var(--niebla-2); overflow:hidden; }
+.tour-foto img{ width:100%; height:100%; object-fit:cover; }
+.tour-foto .yt{ position:absolute; inset:0; aspect-ratio:auto; border-radius:0; }
+.tour-foto .f-flecha{ position:absolute; top:50%; z-index:2; width:46px; height:46px; margin-top:-23px; border-radius:50%; border:0; background:rgba(14,26,32,.6); color:#fff; font-size:24px; line-height:1; cursor:pointer; display:grid; place-items:center; transition:background .2s, transform .2s; }
+.tour-foto .f-flecha:hover{ background:rgba(14,26,32,.88); transform:scale(1.06); }
+.tour-foto .f-flecha.izq{ left:12px; } .tour-foto .f-flecha.der{ right:12px; }
+.tour-foto .f-cuenta{ position:absolute; right:12px; top:12px; z-index:2; padding:6px 11px; border-radius:14px; background:rgba(14,26,32,.72); color:#fff; font:700 var(--t-xs)/1 var(--sans); }
+.tour-foto .f-puntos{ position:absolute; left:50%; top:14px; z-index:2; transform:translateX(-50%); display:flex; gap:6px; }
+.tour-foto .f-puntos i{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.55); box-shadow:0 0 3px rgba(0,0,0,.5); }
+.tour-foto .f-puntos i.on{ background:#fff; }
+.tour-foto img{ transition:opacity .35s; }
+.tour-foto .chip{ position:absolute; left:12px; bottom:12px; max-width:calc(100% - 24px); padding:6px 11px; border-radius:14px; background:rgba(14,26,32,.78); color:#fff; font:600 var(--t-xs)/1.2 var(--sans); }
+.tour-cuerpo{ padding:18px 30px 4px; }
+.tour-cuerpo h3{ margin-top:8px!important; }
+.tour-cuerpo .kicker{ display:flex; align-items:center; gap:10px; }
+.tour-cuerpo .kicker b{ display:inline-grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--alerta); color:#fff; font:800 14px/1 var(--sans); letter-spacing:0; }
+.tour-cuerpo h3{ font-size:26px; font-weight:800; margin:10px 0 10px; }
+.tour-cuerpo p{ font-size:var(--t-m); margin:0 0 .8em; }
+.tour-cuerpo .datos-t{ display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 4px; }
+.tour-cuerpo .datos-t span{ padding:7px 12px; border-radius:16px; background:var(--niebla); font:700 var(--t-xs)/1.2 var(--sans); color:var(--tinta-2); }
+.tour-cuerpo .datos-t span.rojo{ background:#FBEDEC; color:var(--alerta); }
+.fichas-ana{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 2px; }
+.fichas-ana a{ display:inline-flex; align-items:center; gap:7px; padding:8px 12px; border-radius:10px; border:1.5px solid var(--linea); background:var(--papel); color:var(--tinta); font:700 var(--t-xs)/1.2 var(--sans); text-decoration:none; transition:border-color .2s, background .2s; }
+.fichas-ana a:hover{ border-color:var(--teal); background:var(--teal-claro); color:var(--teal-2); }
+.fichas-ana a svg{ width:16px; height:16px; color:var(--alerta); flex:none; }
+.leaflet-popup-content .ficha-link{ display:inline-flex; align-items:center; gap:6px; margin-top:10px; padding:7px 11px; border-radius:8px; background:var(--teal); color:#fff; font:700 12.5px/1 var(--sans); text-decoration:none; }
+.leaflet-popup-content .ficha-link:hover{ background:var(--teal-2); color:#fff; }
+.tour-nav{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 96px 18px 30px; border-top:1px solid var(--linea); background:var(--papel); }
+.tour-puntos{ display:flex; gap:6px; }
+.tour-puntos button{ width:30px; height:30px; border-radius:50%; border:1.5px solid var(--linea); background:var(--papel); font:700 13px/1 var(--sans); color:var(--tinta-2); cursor:pointer; }
+.tour-puntos button.on{ background:var(--tinta); border-color:var(--tinta); color:#fff; }
+.flecha{ width:44px; height:44px; border-radius:50%; border:1.5px solid var(--linea); background:var(--papel); color:var(--tinta); display:grid; place-items:center; cursor:pointer; font-size:20px; }
+.flecha:hover{ border-color:var(--teal); color:var(--teal); }
+.flecha:disabled{ opacity:.35; cursor:default; }
+@media (max-width:900px){ .tour{ grid-template-columns:1fr; height:auto; } .tour-panel{ display:block; overflow:visible; } .tour-foto{ aspect-ratio:4/3; } .tour-nav{ position:sticky; bottom:0; z-index:3; padding-right:84px; } .tour-mapa{ min-height:52vh; } .tour-cuerpo{ padding:20px 20px 8px; } .tour-nav{ padding:10px 20px 22px; } }
+
+/* =========================================================================
+   9. Cronología
+   ========================================================================= */
+.linea{ position:relative; max-width:1060px; margin:0 auto; padding:10px 24px 0; }
+.linea::before{ content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; margin-left:-1px; background:linear-gradient(var(--linea), var(--teal) 10%, var(--teal) 90%, var(--linea)); }
+.hito{ position:relative; width:50%; padding:0 52px 56px 0; }
+.hito:nth-child(even){ margin-left:50%; padding:0 0 56px 52px; }
+.hito .icono{ position:absolute; top:4px; right:-26px; width:52px; height:52px; border-radius:50%; background:var(--papel); border:2px solid var(--teal); color:var(--teal); display:grid; place-items:center; font-size:24px; z-index:1; }
+.hito:nth-child(even) .icono{ right:auto; left:-26px; }
+.hito.grave .icono{ border-color:var(--alerta); color:var(--alerta); }
+.hito.hoy .icono{ background:var(--alerta); border-color:var(--alerta); color:#fff; box-shadow:0 0 0 8px rgba(194,59,59,.15); }
+.hito .caja{ background:var(--papel); border:1px solid var(--linea); border-radius:14px; padding:20px 22px; box-shadow:0 14px 34px -24px rgba(14,26,32,.35);
+  opacity:0; transform:translateY(26px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.hito.visto .caja{ opacity:1; transform:none; }
+.hito .fecha{ font:800 14px/1 var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--teal); }
+.hito.grave .fecha, .hito.hoy .fecha{ color:var(--alerta); }
+.hito h3{ font-size:22px; font-weight:800; margin:8px 0 8px; }
+.hito p{ font-size:var(--t-m); line-height:1.55; margin:0; }
+.hito .medio{ margin:14px 0 0; }
+@media (max-width:820px){
+  .linea::before{ left:30px; }
+  .hito, .hito:nth-child(even){ width:auto; margin-left:0; padding:0 0 40px 60px; }
+  .hito .icono, .hito:nth-child(even) .icono{ left:-18px; right:auto; width:44px; height:44px; font-size:20px; }
+}
+
+/* =========================================================================
+   10. Banda con ola, fotos a pantalla completa, cifras
+   ========================================================================= */
+.ola{ position:relative; background:var(--teal); color:#fff; padding:96px 0; overflow:hidden; }
+.ola svg.borde{ position:absolute; left:0; width:100%; height:60px; }
+.ola svg.borde.arriba{ top:-1px; } .ola svg.borde.abajo{ bottom:-1px; transform:scaleY(-1); }
+.ola .dentro{ position:relative; max-width:960px; margin:0 auto; padding:0 24px; text-align:center; }
+.ola .cifra{ font:900 clamp(96px, 17vw, 200px)/.9 var(--sans); letter-spacing:-.05em; }
+.ola p{ font:600 clamp(23px, 3vw, 34px)/1.3 var(--sans); letter-spacing:-.01em; margin:16px auto 0; max-width:780px; text-wrap:balance; }
+
+.show{ position:relative; height:100vh; min-height:560px; background:#000; overflow:hidden; color:#fff; }
+.show .lam{ position:absolute; inset:0; opacity:0; visibility:hidden; transition:opacity 1s var(--ease), visibility 0s 1s; }
+.show .lam.on{ opacity:1; visibility:visible; transition:opacity 1s var(--ease); }
+.show .lam img{ width:100%; height:100%; object-fit:cover; }
+.show .lam.on img{ animation:acerca 12s ease-out both; }
+@keyframes acerca{ from{ transform:scale(1.07); } to{ transform:scale(1); } }
+.show .lam::after{ content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,.82), rgba(0,0,0,0) 50%); pointer-events:none; }
+.show .portadilla{ position:absolute; z-index:3; left:6vw; top:calc(var(--nav) + 36px); }
+.show .portadilla .kicker{ color:#9FE3E9; }
+.show .portadilla h2{ color:#fff; font-size:clamp(34px, 5vw, 56px); font-weight:900; margin-top:8px; text-shadow:0 2px 20px rgba(0,0,0,.5); }
+.show .lam .txt{ position:absolute; z-index:2; left:6vw; bottom:96px; max-width:560px; }
+.show .lam .txt h3{ color:#fff; font-size:clamp(26px, 3.2vw, 38px); font-weight:800; margin-bottom:8px; }
+.show .lam .txt p{ margin:0 0 12px; color:rgba(255,255,255,.92); font-size:var(--t-m); }
+.show .lam .txt .lugar{ display:inline-block; padding:5px 11px; border-radius:12px; background:rgba(255,255,255,.16); font:600 var(--t-xs)/1.3 var(--sans); }
+.show .ctrl{ position:absolute; z-index:3; left:6vw; right:6vw; bottom:30px; display:flex; align-items:center; gap:16px; }
+.show .ctrl .flecha{ background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.35); color:#fff; }
+.show .barras{ display:flex; gap:6px; flex:1; max-width:300px; }
+.show .barras button{ flex:1; height:4px; padding:0; border:0; border-radius:2px; background:rgba(255,255,255,.3); cursor:pointer; }
+.show .barras button.on{ background:#fff; }
+.show .contador{ font:600 var(--t-xs)/1 var(--sans); color:rgba(255,255,255,.75); margin-left:auto; }
+
+.cifras{ display:grid; grid-template-columns:repeat(3, 1fr); border-top:1px solid var(--linea); }
+.cifra-b{ padding:32px 28px 28px; border-bottom:1px solid var(--linea); border-right:1px solid var(--linea); }
+.cifra-b:nth-child(3n){ border-right:0; }
+.cifra-b .n{ font:900 clamp(44px, 5.4vw, 66px)/1 var(--sans); letter-spacing:-.04em; color:var(--tinta); }
+.cifra-b .n small{ font-size:.45em; letter-spacing:0; font-weight:800; margin-left:2px; }
+.cifra-b.alerta .n{ color:var(--alerta); }
+.cifra-b.teal .n{ color:var(--teal); }
+.cifra-b p{ font:500 var(--t-s)/1.4 var(--sans); color:var(--tinta-2); margin:10px 0 0; }
+@media (max-width:900px){ .cifras{ grid-template-columns:1fr 1fr; } .cifra-b:nth-child(3n){ border-right:1px solid var(--linea); } .cifra-b:nth-child(2n){ border-right:0; } }
+@media (max-width:520px){ .cifras{ grid-template-columns:1fr; } .cifra-b{ border-right:0!important; } }
+.isotipo{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; margin-top:64px; }
+.isotipo .gente{ display:grid; grid-template-columns:repeat(20, 1fr); gap:5px 3px; }
+.isotipo .gente svg{ width:100%; height:auto; color:var(--alerta); opacity:0; transform:translateY(6px); transition:opacity .4s, transform .4s; }
+.isotipo .gente svg.gris{ color:#C5CFD3; }
+.isotipo.visto .gente svg{ opacity:1; transform:none; }
+.isotipo h3{ font-size:30px; font-weight:800; margin:8px 0 12px; }
+.isotipo p{ font-size:var(--t-m); margin:0; }
+.anios{ margin-top:72px; }
+.anios h3{ font-size:24px; font-weight:800; margin-bottom:4px; }
+.anios .sub{ font:400 var(--t-s)/1.5 var(--sans); color:var(--gris); margin:0 0 14px; }
+.anios svg{ width:100%; height:auto; overflow:visible; }
+.anios text{ font:500 13px var(--sans); fill:var(--gris); }
+.anios .val{ font:700 14px var(--sans); fill:var(--tinta); }
+@media (max-width:900px){ .isotipo{ grid-template-columns:1fr; gap:28px; } }
+
+/* =========================================================================
+   11. Visor de imágenes y YouTube
+   ========================================================================= */
+#visor{ position:fixed; inset:0; z-index:1100; background:rgba(8,14,17,.95); display:none; flex-direction:column; align-items:center; justify-content:center; padding:56px 20px 20px; }
+#visor.on{ display:flex; }
+#visor img{ max-width:min(1500px, 100%); max-height:calc(100vh - 120px); object-fit:contain; border-radius:6px; }
+#visor .pie{ color:#C9D6DB; font:500 14px/1.4 var(--sans); max-width:900px; text-align:center; margin-top:12px; }
+#visor .cerrar{ position:absolute; top:12px; right:14px; width:44px; height:44px; border-radius:50%; border:0; background:rgba(255,255,255,.12); color:#fff; font-size:26px; cursor:pointer; }
+#visor .prev, #visor .next{ position:absolute; top:50%; margin-top:-22px; background:rgba(255,255,255,.12); border-color:transparent; color:#fff; }
+#visor .prev{ left:14px; } #visor .next{ right:14px; }
+.yt{ position:relative; display:block; width:100%; aspect-ratio:16/9; border-radius:10px; overflow:hidden; background:#000; border:0; padding:0; cursor:pointer; color:#fff; text-align:left; }
+.yt img{ width:100%; height:100%; object-fit:cover; opacity:.82; transition:opacity .3s, transform .6s var(--ease); }
+.yt:hover img{ opacity:1; transform:scale(1.03); }
+.yt .play{ position:absolute; left:50%; top:50%; width:68px; height:48px; margin:-24px 0 0 -34px; border-radius:12px; background:#E62117; display:grid; place-items:center; box-shadow:0 6px 20px rgba(0,0,0,.4); }
+.yt .play svg{ width:22px; height:22px; fill:#fff; }
+.yt .ytt{ position:absolute; left:0; right:0; top:0; padding:12px 14px 30px; background:linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,0)); font:600 14px/1.35 var(--sans); }
+.yt .vy{ position:absolute; right:10px; bottom:10px; padding:5px 10px; border-radius:12px; background:rgba(0,0,0,.72); font:600 12px/1 var(--sans); }
+.yt iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+
+/* =========================================================================
+   12. Prepárate
+   ========================================================================= */
+.acciones{ display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+.accion{ display:flex; flex-direction:column; background:var(--papel); border:1px solid var(--linea); border-radius:16px; padding:26px 24px 22px; transition:transform .3s var(--ease), box-shadow .3s; }
+.accion:hover{ transform:translateY(-4px); box-shadow:0 20px 40px -24px rgba(14,26,32,.45); }
+.accion .ico{ font-size:36px; color:var(--teal); margin-bottom:14px; }
+.accion.urgente{ grid-row:span 2; background:var(--alerta); border-color:var(--alerta); color:#fff; }
+.accion.urgente .ico, .accion.urgente h3{ color:#fff; }
+.accion.urgente li{ color:rgba(255,255,255,.95); font-size:var(--t-s); margin-bottom:10px; }
+.accion.urgente .tel{ margin-top:auto; display:flex; gap:10px; }
+.accion.urgente .tel span{ flex:1; text-align:center; padding:12px 8px; border-radius:12px; background:rgba(255,255,255,.16); font:800 26px/1 var(--sans); }
+.accion.urgente .tel small{ display:block; font:600 12px/1.3 var(--sans); margin-top:4px; opacity:.85; }
+.accion h3{ font-size:21px; font-weight:800; margin-bottom:8px; }
+.accion p, .accion li{ font:400 var(--t-s)/1.5 var(--sans); color:var(--tinta-2); margin:0; }
+.accion ul{ margin:0 0 16px; padding-left:18px; }
+.accion .enlaces{ margin-top:auto; display:flex; flex-wrap:wrap; gap:8px; padding-top:14px; }
+.accion .enlaces a{ font:700 13.5px/1 var(--sans); padding:9px 12px; border-radius:18px; background:var(--teal-claro); color:var(--teal-2); text-decoration:none; }
+.accion .enlaces a:hover{ background:var(--teal); color:#fff; }
+.aviso-oficial{ text-align:center; font:500 var(--t-xs)/1.5 var(--sans); color:var(--gris); margin:34px auto 0; padding:0 24px; }
+@media (max-width:900px){ .acciones{ grid-template-columns:1fr 1fr; } .accion.urgente{ grid-column:1/-1; grid-row:auto; } }
+@media (max-width:560px){ .acciones{ grid-template-columns:1fr; } }
+
+/* =========================================================================
+   13. Créditos
+   ========================================================================= */
+#creditos{ background:var(--noche); color:#B9C7CD; padding:90px 0 50px; font:400 14.5px/1.55 var(--sans); }
+#creditos .kicker{ color:#7FD6DE; }
+#creditos h2{ color:#fff; font-size:36px; font-weight:800; margin:8px 0 12px; }
+#creditos .intro{ max-width:720px; font-size:var(--t-s); color:#C9D6DB; margin:0 0 28px; }
+.autores{ margin:0 0 48px; padding:20px 22px; border-radius:14px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
+.autores h3{ display:flex; align-items:center; gap:10px; color:#fff; font-size:13px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 14px; }
+.autores h3 .ico{ font-size:18px; color:#7FD6DE; }
+.autores ul{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; }
+.autores li{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; background:rgba(127,214,222,.08); color:#E9F0F2; font:600 14.5px/1.3 var(--sans); }
+.autores li i{ flex:none; width:32px; height:32px; border-radius:50%; background:var(--teal); color:#fff; display:grid; place-items:center; font:800 12px/1 var(--sans); font-style:normal; letter-spacing:.02em; }
+@media (max-width:980px){ .autores ul{ grid-template-columns:1fr 1fr; } }
+@media (max-width:520px){ .autores ul{ grid-template-columns:1fr; } }
+#creditos .intro b{ color:#fff; }
+#creditos a{ color:#9FE3E9; text-decoration:none; }
+#creditos a:hover{ text-decoration:underline; }
+.cred-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:36px 44px; }
+.cred-bloque h3{ display:flex; align-items:center; gap:10px; color:#fff; font-size:13px; letter-spacing:.14em; text-transform:uppercase; padding-bottom:10px; margin-bottom:6px; border-bottom:2px solid var(--teal); }
+.cred-bloque h3 .ico{ font-size:18px; color:#7FD6DE; }
+.cred-bloque h3 small{ margin-left:auto; font:600 12px/1 var(--sans); letter-spacing:0; color:#7FD6DE; }
+.cred-bloque ol, .cred-bloque ul{ list-style:none; margin:0; padding:0; }
+.cred-bloque li{ display:grid; grid-template-columns:1fr auto; gap:2px 12px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.07); }
+.cred-bloque li .t{ color:#E9F0F2; font-weight:600; }
+.cred-bloque li .a{ grid-column:1; font-size:var(--t-xs); color:#9FB2BA; }
+.cred-bloque li .lic{ grid-row:1 / span 2; grid-column:2; align-self:start; font:700 10.5px/1 var(--sans); padding:4px 7px; border-radius:4px; background:rgba(127,214,222,.14); color:#9FE3E9; white-space:nowrap; }
+.cred-bloque.ancho{ grid-column:1/-1; }
+.cred-bloque.ancho ul, .cred-bloque.ancho ol{ columns:2; column-gap:56px; }
+.cred-bloque.ancho li{ break-inside:avoid; }
+#creditos .pie-final{ margin-top:50px; padding-top:22px; border-top:1px solid rgba(255,255,255,.12); display:flex; flex-wrap:wrap; gap:12px 30px; justify-content:space-between; font-size:var(--t-xs); }
+@media (max-width:980px){ .cred-grid{ grid-template-columns:1fr 1fr; } .cred-bloque.ancho{ grid-column:1/-1; } }
+@media (max-width:640px){ .cred-grid{ grid-template-columns:1fr; } .cred-bloque.ancho ul, .cred-bloque.ancho ol{ columns:1; } }
+
+/* =========================================================================
+   14. Mayu
+   ========================================================================= */
+.mayu-av{ display:inline-block; flex:none; line-height:0; }
+.mayu-av svg{ display:block; overflow:visible; }
+.mayu-av .eye, .mayu-av .mouth{ transform-box:fill-box; transform-origin:center; }
+.mayu-av .eye{ animation:mblink 5.5s infinite; }
+@keyframes mblink{ 0%,92%,100%{ transform:scaleY(1); } 95%{ transform:scaleY(.12); } }
+.mayu-av.talk .mouth{ animation:mtalk .32s ease-in-out 5; }
+@keyframes mtalk{ 50%{ transform:scaleY(2.2); } }
+#mayu{ position:fixed; z-index:1050; right:18px; bottom:18px; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+.mayu-fab{ display:flex; align-items:center; gap:10px; padding:7px 16px 7px 8px; border-radius:40px; border:1px solid var(--linea); background:var(--papel); color:var(--tinta); cursor:pointer; box-shadow:0 12px 30px -10px rgba(14,26,32,.4); transition:transform .25s var(--ease); }
+.mayu-fab:hover{ transform:translateY(-2px); }
+.mayu-fab b{ display:block; font:700 14px/1.1 var(--sans); text-align:left; }
+.mayu-fab small{ display:block; font:500 11.5px/1.2 var(--sans); color:var(--teal); text-align:left; }
+.mayu-fab .mayu-av{ background:var(--teal-claro); border-radius:50%; padding:3px; }
+#mayu.mini .mayu-fab b, #mayu.mini .mayu-fab small{ display:none; }
+#mayu.mini .mayu-fab{ padding:6px; }
+.mayu-fab.late{ animation:fablate 2.2s ease-out 3; }
+@keyframes fablate{ 0%{ box-shadow:0 0 0 0 rgba(14,124,134,.45); } 70%{ box-shadow:0 0 0 16px rgba(14,124,134,0); } }
+.mayu-panel{ width:min(380px, calc(100vw - 28px)); max-height:min(72vh, 620px); display:none; flex-direction:column; overflow:hidden; background:var(--papel); border:1px solid var(--linea); border-radius:18px; box-shadow:0 30px 70px -20px rgba(14,26,32,.5); }
+#mayu.abierto .mayu-panel{ display:flex; animation:subir .35s var(--ease); }
+@keyframes subir{ from{ opacity:0; transform:translateY(12px); } }
+.mayu-cab{ display:flex; align-items:center; gap:10px; padding:14px 12px 12px 16px; border-bottom:1px solid var(--linea); background:var(--niebla); }
+.mayu-cab div{ flex:1; }
+.mayu-cab b{ display:block; font:800 15px/1.2 var(--sans); }
+.mayu-cab small{ font:500 12px/1.3 var(--sans); color:var(--gris); }
+.mayu-cab button{ width:34px; height:34px; border-radius:50%; border:0; background:none; font-size:22px; color:var(--gris); cursor:pointer; }
+.mayu-log{ flex:1; overflow-y:auto; padding:14px 16px 6px; font:400 14.5px/1.55 var(--sans); }
+.msg{ margin:0 0 10px; padding:10px 13px; border-radius:14px 14px 14px 4px; background:var(--niebla); max-width:92%; }
+.msg.yo{ margin-left:auto; border-radius:14px 14px 4px 14px; background:var(--teal); color:#fff; }
+.msg ol{ margin:6px 0 0; padding-left:20px; }
+.chips{ display:flex; flex-wrap:wrap; gap:6px; padding:4px 16px 10px; }
+.chips button{ border:1px solid var(--linea); background:var(--papel); color:var(--teal-2); font:600 12.5px/1 var(--sans); padding:8px 11px; border-radius:16px; cursor:pointer; }
+.chips button:hover{ border-color:var(--teal); background:var(--teal-claro); }
+.mayu-form{ display:flex; gap:8px; padding:10px 12px 12px; border-top:1px solid var(--linea); }
+.mayu-form input{ flex:1; min-width:0; border:1px solid var(--linea); border-radius:20px; padding:10px 14px; font:400 14.5px/1.2 var(--sans); color:var(--tinta); }
+.mayu-form input:focus{ outline:none; border-color:var(--teal); }
+.mayu-form button{ border:0; border-radius:50%; width:40px; height:40px; background:var(--teal); color:#fff; cursor:pointer; display:grid; place-items:center; }
+@media (max-width:600px){ .mayu-fab b, .mayu-fab small{ display:none; } .mayu-fab{ padding:6px; } }
+
+@media (prefers-reduced-motion:reduce){
+  *, *::before, *::after{ animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+  html{ scroll-behavior:auto; }
+}
+@media print{ #nav, #mayu, .bajar, .sc-mapa, .tour-mapa, .show .ctrl{ display:none!important; } .hito .caja{ opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<nav id="nav" aria-label="Secciones del relato">
+  <a class="marca" href="#portada"><span class="mayu-av" data-mayu="30"></span><span>Cuando la quebrada despierta<small>Mayu · Observatorio de los Ríos frente al Niño</small></span></a>
+  <ol>
+    <li><a href="#mapa">El lugar</a></li>
+    <li><a href="#quebrada">La quebrada</a></li>
+    <li><a href="#nino">El Niño</a></li>
+    <li><a href="#comparar">Peligros</a></li>
+    <li><a href="#recorrido">Recorrido</a></li>
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#gente">La gente</a></li>
+    <li><a href="#preparate">Prepárate</a></li>
+  </ol>
+  <div id="progreso" aria-hidden="true"></div>
+</nav>
+
+<!-- Portada -->
+<header id="portada">
+  <div class="foto"><img data-m="ica_2017" data-eager="1" alt="Vista aérea de un barrio con las calles inundadas de agua marrón en La Tinguiña, Ica, en enero de 2017"></div>
+  <div class="sello"><span class="mayu-av" data-mayu="38"></span><span>Mayu<small>Observatorio de los Ríos frente al Niño</small></span></div>
+  <div class="contenido">
+    <div class="kicker">San José de Los Molinos · Ica</div>
+    <h1>Cuando la quebrada despierta</h1>
+    <p class="bajada">Una quebrada seca, un pueblo construido encima y un mar que vuelve a calentarse.</p>
+    <a class="alerta" href="#nino"><i></i>El ENFEN mantiene la alerta de El Niño costero hasta 2027</a>
+  </div>
+  <a class="bajar" href="#mapa" aria-label="Empezar"><svg class="ico" viewBox="0 0 24 24" style="font-size:22px"><path d="M6 9l6 6 6-6"/></svg></a>
+</header>
+
+<main>
+<!-- 1 · El lugar: mapa con tarjetas -->
+<section id="mapa" class="sc-mapa" aria-label="Mapa de San José de Los Molinos">
+  <div class="sc-fondo">
+    <div id="mapa-sc" role="region" aria-label="Mapa satelital de San José de Los Molinos"></div>
+    <div class="mapa-aviso">El mapa necesita internet para cargar.</div>
+  </div>
+  <div class="sc-pasos">
+    <div class="sc-paso" data-estado="cuenca"><div class="tarjeta">
+      <div class="kicker">1 · El lugar</div>
+      <h3>Al pie de los cerros</h3>
+      <p>San José de Los Molinos está donde el valle del río Ica sale de los Andes.</p>
+      <div class="gran num"><span data-y="pob">6&#8239;987</span><small>habitantes</small></div>
+      <div class="clave" data-ley="distrito,cuenca,rio"></div>
+    </div></div>
+    <div class="sc-paso" data-estado="abanico"><div class="tarjeta">
+      <div class="kicker">1 · El terreno</div>
+      <h3>Un pueblo sobre el abanico</h3>
+      <p>El centro de Los Molinos ocupa el abanico aluvial de La Yesera: el terreno que la propia quebrada formó, huaico tras huaico.</p>
+      <div class="clave" data-ley="faja,ambito,rio"></div>
+    </div></div>
+    <div class="sc-paso" data-estado="puntos"><div class="tarjeta">
+      <div class="kicker">1 · El peligro</div>
+      <h3>Puntos críticos</h3>
+      <div class="gran num"><span data-y="pc_muy_alto">13</span><small>de <span data-y="pc_total">22</span> en riesgo muy alto</small></div>
+      <p>Los de La Yesera están en sus nueve diques, cerro arriba del pueblo. Toca un punto para ver su ficha.</p>
+      <div class="clave" data-ley="pc_ma,pc_a,sem_r,sem_n"></div>
+    </div></div>
+    <div class="sc-paso" data-estado="gente"><div class="tarjeta">
+      <div class="kicker">1 · La gente</div>
+      <h3>Casi todo el distrito</h3>
+      <div class="gran num"><span data-y="pct_expuesta">96</span>%<small>de la población, expuesta</small></div>
+      <p>También <span data-y="educacion_alto">16</span> de sus <span data-y="educacion_total">20</span> colegios y <span data-y="salud_alto">3</span> de sus <span data-y="salud_total">4</span> centros de salud.</p>
+      <div class="clave" data-ley="ccpp_ma,ccpp_a,ccpp_m,colegio,salud"></div>
+    </div></div>
+    <div class="sc-paso" data-estado="obras"><div class="tarjeta">
+      <div class="kicker">1 · La respuesta</div>
+      <h3>Obras por hacer</h3>
+      <p>La ANA priorizó limpiar los diques de La Yesera para la temporada 2026-2027.</p>
+      <div class="gran num" style="color:var(--teal)"><span data-y="yesera_beneficiarios">4&#8239;502</span><small>beneficiarios</small></div>
+      <p>Todas figuran <b>«por ejecutar»</b>.</p>
+      <div class="clave" data-ley="obra,pobv"></div>
+    </div></div>
+    <div class="sc-paso explorar" data-estado="explorar"><div class="tarjeta">
+      <div class="kicker">Tu turno</div>
+      <h3>Explora el mapa</h3>
+      <p style="font-size:var(--t-s)">Arrastra, acerca y toca cada símbolo.</p>
+      <div class="ly-sub">Capas</div>
+      <div class="ly" id="capas-ctrl"></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 2 · La quebrada -->
+<section id="quebrada" class="seccion gris">
+  <div class="cabeza">
+    <div class="kicker">2 · La protagonista</div>
+    <h2>Conoce a La Yesera</h2>
+    <p class="bajada">Pasa años dormida. Cuando despierta, cruza el pueblo.</p>
+  </div>
+  <div class="amplio ficha">
+    <div class="lienzo" data-visor="m_yesera" role="button" tabindex="0" aria-label="Ampliar el mapa de la quebrada La Yesera">
+      <img data-m="m_abanico" alt="Imagen satelital del abanico de La Yesera: el pueblo de Los Molinos ocupa la parte baja y una franja rayada marca la zona inundable">
+      <span class="lupa"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg>Ver el mapa completo</span>
+    </div>
+    <div class="datos">
+      <div class="dato">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M7 15a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.5 3.5 0 0 1 17 15z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/></svg>
+        <h3>Despierta</h3><div class="grande">Ene–mar</div><p>Con lluvia fuerte en su cabecera.</p>
+      </div>
+      <div class="dato">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M3 17c3-1 4-4 7-4s4 3 7 3 3-1 4-2"/><circle cx="8" cy="9" r="2"/><circle cx="15" cy="7" r="1.5"/><path d="M3 21h18"/></svg>
+        <h3>Trae</h3><div class="grande">Huaicos</div><p>Agua, lodo y piedras en minutos.</p>
+      </div>
+      <div class="dato">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="1"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg>
+        <h3>Faja marginal</h3><div class="grande num"><span data-y="faja.Quebrada Yesera.largo_km" data-dec="1">5,3</span> km</div><p>Zona donde no se debe construir.</p>
+      </div>
+      <div class="dato">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8 12h8"/></svg>
+        <h3>Defensa</h3><div class="grande">9 diques</div><p>Necesitan limpieza antes del verano.</p>
+      </div>
+      <div class="dato alerta">
+        <svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.3c3 .2 5.5 2.4 5.5 5.7"/></svg>
+        <h3>En riesgo directo</h3><div class="grande num"><span data-y="pobv.La Yesera.hab">2&#8239;900</span></div><p>personas en <span data-y="pobv.La Yesera.viv">966</span> viviendas.</p>
+      </div>
+      <div class="dato">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M2 12c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2 5-1"/><path d="M2 17c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2 5-1"/></svg>
+        <h3>Su vecina</h3><div class="grande">Tortolitas</div><p>3 km al norte, con su propia faja.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · El Niño -->
+<section id="nino" class="dock" aria-label="El Niño costero">
+  <div class="dock-texto">
+    <article class="dock-paso" data-marco="m1">
+      <div class="kicker">3 · El motor</div>
+      <h3>El Niño costero</h3>
+      <p>Cuando el mar frente a Perú se calienta, llueve fuerte donde casi nunca llueve. Y las quebradas secas despiertan.</p>
+      <div class="trio">
+        <div><strong class="num">650</strong><span>m³/s llevó el río Ica en 1998: casi el doble de lo que soporta su cauce.</span></div>
+        <div><strong class="num">+250%</strong><span>de lluvia sobre lo normal en la costa de Ica durante El Niño.</span></div>
+        <div class="rojo"><strong>2027</strong><span>El ENFEN mantiene la alerta: el evento duraría hasta el otoño de 2027.</span></div>
+      </div>
+    </article>
+    <article class="dock-paso" data-marco="m2">
+      <div class="kicker">3 · La temporada</div>
+      <h3>Tres meses de riesgo</h3>
+      <p>Entre enero y marzo pasa <b>la mitad del agua del año</b> y ocurren <b>9 de cada 10 emergencias</b>.</p>
+      <p>Por eso la preparación es ahora, no en febrero.</p>
+    </article>
+  </div>
+  <div class="dock-medio" aria-live="polite">
+    <div class="marco on" id="m1"><video data-m="v_oni" muted loop playsinline preload="none" data-auto="1"></video>
+      <div class="rotulo">Índice Oceánico El Niño de la NOAA, 1950–2023<small>Rojo: El Niño · Azul: La Niña</small></div></div>
+    <div class="marco grafico" id="m2"><div class="graf" id="graf-mes"></div></div>
+  </div>
+</section>
+
+<!-- 4 · Peligros: comparador -->
+<section id="comparar" class="swipe-sec">
+  <div class="cabeza centro">
+    <div class="kicker">4 · Antes y durante</div>
+    <h2>Dos peligros, otro verano</h2>
+    <p class="bajada">Arrastra la barra: a la izquierda, un año normal; a la derecha, con las lluvias de El Niño.</p>
+  </div>
+  <div class="amplio">
+    <div class="pestanas" role="tablist" aria-label="Tipo de peligro">
+      <button role="tab" aria-selected="true" data-par="inund" type="button"><svg class="ico" viewBox="0 0 24 24"><path d="M2 12c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2 5-1"/><path d="M2 17c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2 5-1"/></svg>Inundaciones</button>
+      <button role="tab" aria-selected="false" data-par="mm" type="button"><svg class="ico" viewBox="0 0 24 24"><path d="M3 20l6-10 4 6 3-4 5 8z"/><circle cx="16" cy="6" r="1.6"/></svg>Movimientos en masa</button>
+    </div>
+    <div class="comparador">
+      <div class="swipe" id="swipe" style="--x:50%">
+        <div class="capa der"><img data-m="m_nino" alt=""></div>
+        <div class="capa izq"><img data-m="m_normal" alt=""></div>
+        <div class="barra"><div class="asa"><svg class="ico" viewBox="0 0 24 24" style="font-size:22px"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></div></div>
+        <span class="etq l">Año normal</span>
+        <span class="etq r">Con El Niño</span>
+        <input type="range" min="0" max="100" value="50" step="0.5" aria-label="Deslizar para comparar sin y con El Niño">
+      </div>
+      <div class="lectura-mapa" aria-live="polite">
+        <div class="kicker" id="lm-k">Inundaciones</div>
+        <h3 id="lm-t">La costa de Ica pasa a rojo</h3>
+        <p id="lm-p">Con El Niño, la susceptibilidad a inundarse sube a alta y muy alta en el valle de Ica.</p>
+        <div class="escala"><i style="background:#2E9E3A"></i><i style="background:#A6D96A"></i><i style="background:#FFFF33"></i><i style="background:#F39C34"></i><i style="background:#E8231F"></i></div>
+        <div class="escala-txt"><span>Muy baja</span><span>Muy alta</span></div>
+        <div class="botones">
+          <button class="boton" id="swipe-zoom" type="button" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6"/></svg><span>Acercar a Ica</span></button>
+          <button class="boton" id="swipe-grande" type="button"><svg class="ico" viewBox="0 0 24 24"><path d="M4 4h6M4 4v6M20 20h-6M20 20v-6M4 4l6 6M20 20l-6-6"/></svg>Ver en grande</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · Recorrido -->
+<section id="recorrido" class="seccion" style="padding-bottom:0">
+  <div class="cabeza">
+    <div class="kicker">5 · Recorrido</div>
+    <h2>Seis lugares para entender el riesgo</h2>
+  </div>
+  <div class="tour">
+    <div class="tour-mapa"><div id="tour-mapa" role="region" aria-label="Mapa del recorrido"></div><div class="mapa-aviso">El mapa necesita internet.</div></div>
+    <div class="tour-panel" aria-live="polite">
+      <div class="tour-foto" id="tour-foto"></div>
+      <div class="tour-cuerpo" id="tour-cuerpo"></div>
+      <div class="tour-nav">
+        <button class="flecha" id="tour-prev" type="button" aria-label="Lugar anterior">‹</button>
+        <div class="tour-puntos" id="tour-puntos"></div>
+        <button class="flecha" id="tour-next" type="button" aria-label="Lugar siguiente">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · Historia -->
+<section id="historia" class="seccion gris">
+  <div class="cabeza">
+    <div class="kicker">6 · Memoria</div>
+    <h2>Las noches en que despertó</h2>
+    <p class="bajada">No es una amenaza teórica: ya pasó, y quedó grabado.</p>
+  </div>
+  <div class="linea" id="linea"></div>
+</section>
+
+<div class="ola" role="note">
+  <svg class="borde arriba" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0h1440v22c-120 22-240 34-360 22S840 8 720 18 480 54 360 52 120 30 0 26z" fill="#F2F5F6"/></svg>
+  <div class="dentro">
+    <div class="cifra num">80&#8239;%</div>
+    <p>de las viviendas de Los Molinos podrían ser alcanzadas si La Yesera y Tortolitas se activan a la vez.</p>
+  </div>
+  <svg class="borde abajo" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0h1440v22c-120 22-240 34-360 22S840 8 720 18 480 54 360 52 120 30 0 26z" fill="#000"/></svg>
+</div>
+
+<!-- 7 · Lo que deja un huaico -->
+<section id="huaico">
+  <div class="show" id="show" tabindex="0" aria-roledescription="presentación" aria-label="Lo que deja un huaico">
+    <div class="portadilla"><div class="kicker">7 · Después</div><h2>Lo que deja un huaico</h2></div>
+    <div class="lam on"><img data-m="huaico_calle" alt="Vecinos y soldados cruzan una calle cubierta de lodo"><div class="txt"><h3>Cruzar la calle</h3><p>El agua se va. El barro se queda.</p><span class="lugar">Chosica, Lima</span></div></div>
+    <div class="lam"><img data-m="huaico_casa" alt="Interior de una vivienda cubierto de lodo"><div class="txt"><h3>Vaciar la casa</h3><p>Sacar el lodo lleva días. Lo que estaba en el piso, se pierde.</p><span class="lugar">Chosica, Lima</span></div></div>
+    <div class="lam"><img data-m="huaico_escombros" alt="Calle llena de piedras y barro después de un huaico"><div class="txt"><h3>La calle se vuelve cauce</h3><p>Las piedras quedan donde el agua las soltó.</p><span class="lugar">Perú</span></div></div>
+    <div class="lam"><img data-m="deslizamiento" alt="Ladera deslizada que arrastró terrazas de cultivo"><div class="txt"><h3>El cerro también se mueve</h3><p>Con lluvia intensa, laderas enteras se deslizan.</p><span class="lugar">Cusco, 2018</span></div></div>
+    <div class="ctrl">
+      <button class="flecha" data-dir="-1" type="button" aria-label="Foto anterior">‹</button>
+      <button class="flecha" data-dir="1" type="button" aria-label="Foto siguiente">›</button>
+      <div class="barras"></div>
+      <span class="contador num"></span>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · La gente -->
+<section id="gente" class="seccion">
+  <div class="cabeza">
+    <div class="kicker">8 · Exposición</div>
+    <h2>Quiénes están en la zona</h2>
+  </div>
+  <div class="amplio">
+    <div class="cifras">
+      <div class="cifra-b"><div class="n num" data-cuenta="pob">6&#8239;987</div><p>habitantes en <span data-y="ccpp">26</span> centros poblados</p></div>
+      <div class="cifra-b alerta"><div class="n num"><span data-cuenta="pct_expuesta">96</span><small>%</small></div><p>con exposición alta o muy alta</p></div>
+      <div class="cifra-b alerta"><div class="n num" data-cuenta="pobv.La Yesera.hab">2&#8239;900</div><p>en riesgo directo por La Yesera</p></div>
+      <div class="cifra-b"><div class="n num"><span data-cuenta="educacion_alto">16</span><small> de <span data-y="educacion_total">20</span></small></div><p>colegios expuestos</p></div>
+      <div class="cifra-b"><div class="n num"><span data-cuenta="salud_alto">3</span><small> de <span data-y="salud_total">4</span></small></div><p>centros de salud expuestos</p></div>
+      <div class="cifra-b teal"><div class="n num" data-cuenta="indeci.afectados">20&#8239;789</div><p>afectados en <span data-y="indeci.emergencias">18</span> emergencias (2003–2020)</p></div>
+    </div>
+    <div class="isotipo" id="isotipo">
+      <div class="gente" id="gente-iso" aria-hidden="true"></div>
+      <div>
+        <div class="kicker">Si el distrito fuera 100 personas</div>
+        <h3><span data-y="pct_expuesta">96</span> vivirían en zona expuesta</h3>
+        <p>No es un barrio en riesgo dentro de un distrito seguro. Es casi todo el distrito.</p>
+      </div>
+    </div>
+    <div class="anios">
+      <h3>Emergencias por año</h3>
+      <p class="sub">San José de Los Molinos, 2003–2020. En enero de 2017: 4&#8239;925 afectados y 1&#8239;695 damnificados.</p>
+      <div id="graf-anios"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · Prepárate -->
+<section id="preparate" class="seccion gris">
+  <div class="cabeza">
+    <div class="kicker">9 · Prepárate</div>
+    <h2>¿Qué puedes hacer?</h2>
+    <p class="bajada">La temporada de lluvias empieza en diciembre.</p>
+  </div>
+  <div class="amplio acciones">
+    <div class="accion urgente">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></svg>
+      <h3>Si escuchas el huaico</h3>
+      <ul><li>Sube a una zona alta. No esperes a ver el agua.</li><li>No cruces la quebrada ni la vía inundada.</li><li>Avisa a tus vecinos.</li></ul>
+      <div class="tel"><span>115<small>Bomberos</small></span><span>105<small>Policía</small></span></div>
+    </div>
+    <div class="accion">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg>
+      <h3>Conoce tu ruta</h3><p>Define con tu familia un punto seguro al que llegues sin cruzar la quebrada.</p>
+      <div class="enlaces"><a href="#mapa">Ver el mapa</a></div>
+    </div>
+    <div class="accion">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M7 8a5 5 0 0 1 10 0v12H7z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M9 14h6"/></svg>
+      <h3>Arma tu mochila</h3><p>Agua, comida, linterna, radio, botiquín y tus documentos en bolsa plástica.</p>
+    </div>
+    <div class="accion">
+      <svg class="ico" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+      <h3>Sigue los avisos</h3><p>Solo de fuentes oficiales.</p>
+      <div class="enlaces"><a href="https://enfen.imarpe.gob.pe/" target="_blank" rel="noopener">ENFEN</a><a href="https://www.senamhi.gob.pe/?p=aviso-meteorologico" target="_blank" rel="noopener">SENAMHI</a><a href="https://www.gob.pe/institucion/indeci" target="_blank" rel="noopener">INDECI</a></div>
+    </div>
+    <div class="accion">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
+      <h3>Libera el cauce</h3><p>Ni casas, ni basura, ni desmonte en la quebrada: desvían el huaico hacia el pueblo.</p>
+    </div>
+  </div>
+  <p class="aviso-oficial">Este relato informa, no emite alertas.</p>
+</section>
+</main>
+
+<!-- Créditos -->
+<footer id="creditos">
+  <div class="amplio">
+    <div class="kicker">Créditos</div>
+    <h2>Fuentes y créditos</h2>
+    <p class="intro">Un relato de <b>Mayu: Observatorio de los Ríos frente al Niño</b> · Aspectos Sociales de la Ingeniería Ambiental, UTEC, 2026.</p>
+    <div class="autores">
+      <h3><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.3c3 .2 5.5 2.4 5.5 5.7"/></svg>Autores</h3>
+      <ul>
+        <li><i>LC</i>Cupe Espinoza Luis Angel</li>
+        <li><i>MM</i>Marzano Mejia Mayra</li>
+        <li><i>GT</i>Taipe Bendezu Gabriela</li>
+        <li><i>MF</i>Farfan Tipo Mabel Cris</li>
+      </ul>
+    </div>
+    <div class="cred-grid">
+      <div class="cred-bloque">
+        <h3><svg class="ico" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Datos del mapa</h3>
+        <ul id="cred-datos"></ul>
+      </div>
+      <div class="cred-bloque">
+        <h3><svg class="ico" viewBox="0 0 24 24"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>Mapas</h3>
+        <ol id="cred-mapas"></ol>
+      </div>
+      <div class="cred-bloque">
+        <h3><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>Videos</h3>
+        <ol id="cred-videos"></ol>
+      </div>
+      <div class="cred-bloque ancho">
+        <h3><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="15" rx="2"/><circle cx="12" cy="12.5" r="4"/><path d="M8 5l1.5-2h5L16 5"/></svg>Fotografías</h3>
+        <ol id="cred-fotos"></ol>
+      </div>
+      <div class="cred-bloque ancho">
+        <h3><svg class="ico" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>Cifras citadas</h3>
+        <ul id="cred-refs"></ul>
+      </div>
+    </div>
+    <div class="pie-final">
+      <span>Las fotos y videos conservan la licencia de sus autores. Los datos pertenecen a sus instituciones.</span>
+      <a href="#portada">Volver al inicio ↑</a>
+    </div>
+  </div>
+</footer>
+
+<div id="visor" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+  <button class="cerrar" type="button" aria-label="Cerrar">×</button>
+  <button class="flecha prev" type="button" aria-label="Anterior">‹</button>
+  <img alt="">
+  <div class="pie"></div>
+  <button class="flecha next" type="button" aria-label="Siguiente">›</button>
+</div>
+
+<div id="mayu">
+  <div class="mayu-panel" id="mayu-panel" role="dialog" aria-label="Mayu, guía del relato">
+    <div class="mayu-cab"><span class="mayu-av" data-mayu="40"></span><div><b>Mayu</b><small id="mayu-donde">Tu guía en este relato</small></div><button type="button" id="mayu-cerrar" aria-label="Cerrar">×</button></div>
+    <div class="mayu-log" id="mayu-log"></div>
+    <div class="chips" id="mayu-chips"></div>
+    <form class="mayu-form" id="mayu-form"><input id="mayu-in" type="text" placeholder="Pregúntame: huaico, faja, El Niño…" autocomplete="off" aria-label="Escribe tu pregunta"><button type="submit" aria-label="Enviar"><svg class="ico" viewBox="0 0 24 24" style="font-size:18px"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></form>
+  </div>
+  <button class="mayu-fab" id="mayu-fab" type="button" aria-expanded="false" aria-controls="mayu-panel"><span class="mayu-av" data-mayu="38"></span><span><b>Pregúntale a Mayu</b><small>Índice y dudas</small></span></button>
+</div>
+
+<script src="catalogo_medios.js"></script>
+<script src="datos_yesera.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var MEDIOS = window.MEDIOS || {};
+  var Y = window.YESERA || { capas: {}, stats: {} };
+  var S = Y.stats || {};
+  var reducir = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var movil = matchMedia("(max-width: 760px)").matches;
+  var esArchivo = location.protocol === "file:";
+
+  /* 1. Cifras calculadas por preparar_datos.py */
+  var NBSP = " ";
+  function fmt(n, dec) {
+    if (typeof n !== "number" || isNaN(n)) return n;
+    var s = n.toFixed(dec || 0).split(".");
+    s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, NBSP);
+    return s.join(",");
+  }
+  function ruta(o, p) { return p.split(".").reduce(function (a, k) { return a == null ? undefined : a[k]; }, o); }
+  var reg = S.regimen_mes || [9.9, 19.3, 21.1, 12.6, 4.3, 2.2, 1.3, 0.7, 3.6, 8.9, 9.1, 7.1];
+  var emes = (S.indeci && S.indeci.por_mes_provincia) || [66, 49, 11, 5, 0, 1, 1, 1, 0, 0, 3, 6];
+  $$("[data-y]").forEach(function (el) { var v = ruta(S, el.dataset.y); if (typeof v === "number") el.textContent = fmt(v, +el.dataset.dec || 0); });
+
+  /* 2. Medios: archivo local primero, copia en línea si no existe */
+  function cargarImg(img) {
+    var m = MEDIOS[img.dataset.m]; if (!m) return;
+    if (!img.getAttribute("alt")) img.alt = m.titulo || "";
+    if (!img.dataset.eager) img.loading = "lazy";
+    img.decoding = "async";
+    img.onerror = function () { if (m.remoto && img.src !== m.remoto) img.src = m.remoto; };
+    img.src = m.local || m.remoto;
+  }
+  $$("img[data-m]").forEach(cargarImg);
+  function cargarVideo(v) {
+    var m = MEDIOS[v.dataset.m]; if (!m || v.dataset.listo) return;
+    v.dataset.listo = 1; v.setAttribute("aria-label", m.titulo); if (m.poster) v.poster = m.poster;
+    [m.local, m.remoto].forEach(function (u) { if (!u) return; var s = document.createElement("source"); s.src = u; s.type = "video/webm"; v.appendChild(s); });
+    v.load();
+  }
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  /* YouTube liviano: en archivo local abre YouTube (los embebidos fallan sin servidor) */
+  function yt(el) {
+    var m = MEDIOS[el.dataset.yt]; if (!m) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "yt";
+    b.setAttribute("aria-label", "Ver video: " + m.titulo);
+    b.innerHTML = '<img loading="lazy" alt="" src="https://i.ytimg.com/vi/' + m.id + '/hqdefault.jpg"><span class="ytt">' + esc(m.titulo) + '</span><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></span>' + (esArchivo ? '<span class="vy">YouTube ↗</span>' : "");
+    b.addEventListener("click", function () {
+      if (esArchivo) { window.open("https://www.youtube.com/watch?v=" + m.id, "_blank", "noopener"); return; }
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + m.id + "?autoplay=1&rel=0";
+      f.title = m.titulo; f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen = true;
+      b.innerHTML = ""; b.appendChild(f); b.style.cursor = "default";
+    });
+    el.replaceWith(b);
+  }
+
+  var ICON = {
+    ola: '<path d="M2 12c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2 5-1"/><path d="M2 17c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2 5-1"/><path d="M2 7c2.5-3 5-3 7.5 0s5 3 7.5 0 3.5-2 5-1"/>',
+    lluvia: '<path d="M7 15a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.5 3.5 0 0 1 17 15z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>',
+    huaico: '<path d="M3 17c3-1 4-4 7-4s4 3 7 3 3-1 4-2"/><circle cx="8" cy="9" r="2"/><circle cx="15" cy="7" r="1.5"/><path d="M3 21h18"/>',
+    regla: '<rect x="2" y="8" width="20" height="8" rx="1"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/>',
+    alerta: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',
+    ciclon: '<path d="M12 4a8 8 0 1 0 8 8"/><path d="M12 8a4 4 0 1 0 4 4"/><circle cx="12" cy="12" r="1"/>',
+    pala: '<path d="M14 4l6 6"/><path d="M17 7l-9 9"/><path d="M5 15l4 4-2 2-4-4z"/>'
+  };
+  function icono(n) { return '<svg class="ico" viewBox="0 0 24 24">' + (ICON[n] || ICON.alerta) + "</svg>"; }
+
+  /* 3. Navegación y progreso */
+  var nav = $("#nav"), prog = $("#progreso"), portada = $("#portada");
+  function alScroll() {
+    var y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+    nav.classList.toggle("on", y > portada.offsetHeight * 0.8);
+    var my = document.getElementById("mayu"); if (my) my.classList.toggle("mini", y > portada.offsetHeight * 0.6 && !my.classList.contains("abierto"));
+    prog.style.transform = "scaleX(" + Math.min(1, y / h) + ")";
+  }
+  addEventListener("scroll", alScroll, { passive: true }); alScroll();
+  var enlaces = $$("#nav ol a");
+  var secObs = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      enlaces.forEach(function (a) { a.classList.toggle("activo", a.getAttribute("href") === "#" + e.target.id); });
+      var act = $("#nav ol a.activo"); if (act) act.closest("ol").scrollLeft = act.parentNode.offsetLeft - 40;
+      if (window.MAYU) window.MAYU.seccion(e.target.id);
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  ["mapa", "quebrada", "nino", "comparar", "recorrido", "historia", "huaico", "gente", "preparate", "creditos"].forEach(function (id) { var el = document.getElementById(id); if (el) secObs.observe(el); });
+
+  /* 4. Visor de imágenes */
+  var visor = $("#visor"), vImg = $("img", visor), vPie = $(".pie", visor), vLista = [], vI = 0, vVolver = null;
+  function verEn(lista, i) {
+    vLista = lista; vI = i; var m = MEDIOS[lista[i]];
+    vImg.onerror = function () { if (m.remoto && vImg.src !== m.remoto) vImg.src = m.remoto; };
+    vImg.src = m.local || m.remoto; vImg.alt = m.titulo; vPie.textContent = m.titulo;
+    $(".prev", visor).style.display = $(".next", visor).style.display = lista.length > 1 ? "" : "none";
+  }
+  function abrirVisor(lista, i) { vVolver = document.activeElement; verEn(lista, i); visor.classList.add("on"); $(".cerrar", visor).focus(); document.body.style.overflow = "hidden"; }
+  function cerrarVisor() { visor.classList.remove("on"); document.body.style.overflow = ""; if (vVolver) vVolver.focus(); }
+  $(".cerrar", visor).addEventListener("click", cerrarVisor);
+  $(".prev", visor).addEventListener("click", function () { verEn(vLista, (vI - 1 + vLista.length) % vLista.length); });
+  $(".next", visor).addEventListener("click", function () { verEn(vLista, (vI + 1) % vLista.length); });
+  visor.addEventListener("click", function (e) { if (e.target === visor) cerrarVisor(); });
+  addEventListener("keydown", function (e) {
+    if (!visor.classList.contains("on")) return;
+    if (e.key === "Escape") cerrarVisor();
+    if (e.key === "ArrowLeft") $(".prev", visor).click();
+    if (e.key === "ArrowRight") $(".next", visor).click();
+  });
+  $$("[data-visor]").forEach(function (el) {
+    var abrir = function () { abrirVisor([el.dataset.visor], 0); };
+    el.addEventListener("click", abrir);
+    el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); abrir(); } });
+  });
+
+  /* 5. El Niño: gráfico mensual y panel acoplado */
+  (function () {
+    var MES = ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+    var MESL = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+    var tot = emes.reduce(function (a, b) { return a + b; }, 0) || 1;
+    var ep = emes.map(function (n) { return 100 * n / tot; });
+    var W = 760, H = 380, ml = 40, mb = 30, mt = 34, cw = (W - ml) / 12, bw = cw * 0.34, max = 50;
+    var yv = function (v) { return mt + (H - mt - mb) * (1 - v / max); };
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Porcentaje del caudal anual y de las emergencias por mes">';
+    s += '<rect class="temporada" x="' + ml + '" y="' + (mt - 22) + '" width="' + cw * 3 + '" height="' + (H - mt - mb + 22) + '" rx="6"/>';
+    s += '<text class="rot-temp" x="' + (ml + 8) + '" y="' + (mt - 7) + '">TEMPORADA DE LLUVIAS</text><g class="eje">';
+    [0, 10, 20, 30, 40, 50].forEach(function (v) { s += '<line x1="' + ml + '" x2="' + W + '" y1="' + yv(v) + '" y2="' + yv(v) + '"/><text x="' + (ml - 8) + '" y="' + (yv(v) + 4) + '" text-anchor="end">' + v + "%</text>"; });
+    MES.forEach(function (m, i) { s += '<text x="' + (ml + cw * i + cw / 2) + '" y="' + (H - 8) + '" text-anchor="middle">' + m + "</text>"; });
+    s += "</g>";
+    for (var i = 0; i < 12; i++) {
+      var x = ml + cw * i + cw / 2;
+      s += '<rect x="' + (x - bw - 1) + '" y="' + yv(reg[i]) + '" width="' + bw + '" height="' + (yv(0) - yv(reg[i])) + '" rx="2" fill="#3FC1CB"><title>' + MESL[i] + ": " + fmt(reg[i], 1) + " % del caudal anual</title></rect>";
+      s += '<rect x="' + (x + 1) + '" y="' + yv(ep[i]) + '" width="' + bw + '" height="' + (yv(0) - yv(ep[i])) + '" rx="2" fill="#F2994A"><title>' + MESL[i] + ": " + emes[i] + " emergencias</title></rect>";
+    }
+    s += "</svg>";
+    var tabla = '<table class="sr"><caption>Caudal y emergencias por mes</caption><tr><th>Mes</th><th>Caudal (%)</th><th>Emergencias</th></tr>' +
+      MESL.map(function (m, i) { return "<tr><td>" + m + "</td><td>" + fmt(reg[i], 1) + "</td><td>" + emes[i] + "</td></tr>"; }).join("") + "</table>";
+    $("#graf-mes").innerHTML = "<h4>Agua y emergencias, mes a mes</h4><div class=\"sub\">Porcentaje del total anual</div>" + s +
+      '<div class="ley"><span><i style="background:#3FC1CB"></i>Caudal del río Ica en Los Molinos</span><span><i style="background:#F2994A"></i>Emergencias en la provincia</span></div>' + tabla;
+  })();
+  (function () {
+    var pasos = $$("#nino .dock-paso"), marcos = $$("#nino .marco");
+    function activar(id) {
+      marcos.forEach(function (m) {
+        var on = m.id === id; m.classList.toggle("on", on);
+        $$("video", m).forEach(function (v) {
+          if (on) { cargarVideo(v); if (!reducir) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } } else v.pause();
+        });
+      });
+    }
+    var obs = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { pasos.forEach(function (p) { p.classList.toggle("activo", p === e.target); }); activar(e.target.dataset.marco); } });
+    }, { rootMargin: movil ? "-62% 0px -34% 0px" : "-48% 0px -48% 0px" });
+    pasos.forEach(function (p) { obs.observe(p); });
+  })();
+
+  /* 6. Comparador: inundaciones y movimientos en masa */
+  (function () {
+    var sw = $("#swipe"), rng = $("input", sw), zb = $("#swipe-zoom");
+    var PARES = {
+      inund: { a: "m_normal", b: "m_nino", k: "Inundaciones", t: "La costa de Ica pasa a rojo",
+        p: "Con El Niño, la susceptibilidad a inundarse sube a alta y muy alta en el valle de Ica." },
+      mm: { a: "m_mm_normal", b: "m_mm_nino", k: "Movimientos en masa", t: "Huaicos y deslizamientos",
+        p: "Con El Niño, Ica sube a alta y la sierra de Huancavelica, donde nacen sus ríos, a muy alta." }
+    };
+    var par = "inund";
+    function poner(k) {
+      if (k === par && $("img", $(".izq", sw)).src) return; par = k; var P = PARES[k];
+      sw.classList.add("cambia");
+      setTimeout(function () {
+        var ia = $(".izq img", sw), ib = $(".der img", sw);
+        ia.dataset.m = P.a; ib.dataset.m = P.b; ia.removeAttribute("src"); ib.removeAttribute("src"); ia.alt = MEDIOS[P.a].titulo; ib.alt = MEDIOS[P.b].titulo;
+        cargarImg(ia); cargarImg(ib); sw.classList.remove("cambia");
+      }, reducir ? 0 : 300);
+      $("#lm-k").textContent = P.k; $("#lm-t").textContent = P.t; $("#lm-p").textContent = P.p;
+      $$(".pestanas button").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.par === k); });
+    }
+    $$(".pestanas button").forEach(function (b) { b.addEventListener("click", function () { poner(b.dataset.par); }); });
+    rng.addEventListener("input", function () { sw.style.setProperty("--x", rng.value + "%"); });
+    zb.addEventListener("click", function () {
+      var on = sw.classList.toggle("zoom");
+      zb.setAttribute("aria-pressed", on); $("span", zb).textContent = on ? "Ver todo el Perú" : "Acercar a Ica";
+    });
+    $("#swipe-grande").addEventListener("click", function () { abrirVisor([PARES[par].a, PARES[par].b], 1); });
+    if (!reducir) new IntersectionObserver(function (es, o) {
+      if (!es[0].isIntersecting) return; o.disconnect();
+      var t0 = null;
+      function paso(t) {
+        if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1800);
+        var v = 50 + 22 * Math.sin(k * Math.PI * 2); rng.value = v; sw.style.setProperty("--x", v + "%");
+        if (k < 1) requestAnimationFrame(paso);
+      }
+      setTimeout(function () { requestAnimationFrame(paso); }, 500);
+    }, { threshold: 0.6 }).observe(sw);
+  })();
+
+  /* 7. Mapas (Leaflet) */
+  var COL = { "Muy alto": "#C23B3B", "Alto": "#E08A2E", MUYALTO: "#C23B3B", ALTO: "#E08A2E", MEDIO: "#E9C46A", BAJO: "#8AB17D" };
+  function expCol(t) { var k = (t || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, ""); return COL[k] || "#9AA3AD"; }
+  function titulo(t) { t = String(t || "").toLowerCase(); return t.replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); }); }
+  function base(map) {
+    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 18, attribution: "Imagen: Esri, Maxar, Earthstar Geographics" }).addTo(map);
+    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { maxZoom: 18, opacity: .85 }).addTo(map);
+  }
+  /* Simbología: un solo juego de iconos para el mapa, las leyendas y el panel de capas */
+  var SEM = { r: "#C23B3B", n: "#E08A2E", a: "#2F6FD6" };
+  var AZUL = "#2F6FD6", ROSA = "#D6336C";
+  function svgTri(col, s) {
+    return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24"><path d="M12 2.6 22.6 20.6H1.4z" fill="' + col + '" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>' +
+      '<path d="M12 9v5.2" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17.3" r="1.35" fill="#fff"/></svg>';
+  }
+  var GLIFO = {
+    obra: '<path d="M3 17h18"/><path d="M5 17a7 7 0 0 1 14 0"/><path d="M10 10V6h4v4"/>',
+    colegio: '<path d="M2 10l10-6 10 6-10 6z"/><path d="M6 12.5V17c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>',
+    salud: '<path d="M12 5.5v13M5.5 12h13" stroke-width="3"/>'
+  };
+  function svgBadge(col, glifo, s, redondo, alerta) {
+    return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24"><rect x="1.5" y="1.5" width="21" height="21" rx="' + (redondo ? 10.5 : 6) + '" fill="#fff" stroke="' + col + '" stroke-width="2"/>' +
+      '<g fill="none" stroke="' + col + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="translate(4.4 4.4) scale(.6333)">' + GLIFO[glifo] + "</g>" +
+      (alerta ? '<circle cx="21" cy="3" r="4" fill="' + SEM.r + '" stroke="#fff" stroke-width="1.5"/>' : "") + "</svg>";
+  }
+  function svgSimple(tipo, a, b) {
+    var w = '<svg width="22" height="22" viewBox="0 0 24 24">';
+    if (tipo === "linea") return w + '<path d="M2 15c4-6 8 2 12-4s6-3 8-5" fill="none" stroke="' + a + '" stroke-width="3" stroke-linecap="round"/></svg>';
+    if (tipo === "area") return w + '<rect x="3" y="3" width="18" height="18" rx="3" fill="' + a + '" fill-opacity="' + (b || .35) + '" stroke="' + a + '" stroke-width="2"/></svg>';
+    if (tipo === "borde") return w + '<rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="' + a + '" stroke-width="2" stroke-dasharray="' + (b || "4 3") + '"/></svg>';
+    if (tipo === "circulo") return w + '<circle cx="12" cy="12" r="' + (b || 7) + '" fill="' + a + '" stroke="#fff" stroke-width="2"/></svg>';
+    if (tipo === "halo") return w + '<circle cx="12" cy="12" r="9" fill="' + a + '" fill-opacity=".3" stroke="' + a + '" stroke-width="2"/><circle cx="12" cy="9.6" r="2.3" fill="' + a + '"/><path d="M7.8 16.6a4.2 4.2 0 0 1 8.4 0z" fill="' + a + '"/></svg>';
+    if (tipo === "pill") return w + '<rect x="1" y="6" width="22" height="12" rx="6" fill="#fff" stroke="#C9D3D7"/><rect x="4" y="8.5" width="3" height="7" rx="1.5" fill="' + a + '"/><path d="M10 12h9" stroke="#8A989F" stroke-width="2" stroke-linecap="round"/></svg>';
+    return "";
+  }
+  var LEY = {
+    distrito: [svgSimple("area", "#3FC1CB", .18), "Distrito"],
+    cuenca: [svgSimple("borde", "#3E4F59", "4 3"), "Cuenca del río Ica"],
+    rio: [svgSimple("linea", "#3FA9F5"), "Río Ica"],
+    faja: [svgSimple("area", "#F2994A", .45), "Faja marginal"],
+    ambito: [svgSimple("borde", "#3E4F59", "2 3"), "Centro poblado"],
+    pc_ma: [svgTri(SEM.r, 22), "Riesgo muy alto"],
+    pc_a: [svgTri(SEM.n, 22), "Riesgo alto"],
+    sem_r: [svgSimple("pill", SEM.r), "Actuar ya"],
+    sem_n: [svgSimple("pill", SEM.n), "Reforzar"],
+    ccpp_ma: [svgSimple("circulo", "#C23B3B"), "Exposición muy alta"],
+    ccpp_a: [svgSimple("circulo", "#E08A2E"), "Alta"],
+    ccpp_m: [svgSimple("circulo", "#E9C46A"), "Media o baja"],
+    colegio: [svgBadge(AZUL, "colegio", 22), "Colegio"],
+    salud: [svgBadge(ROSA, "salud", 22, true), "Salud"],
+    obra: [svgBadge("#0E7C86", "obra", 22), "Obra ANA 2026"],
+    pobv: [svgSimple("halo", "#3FC1CB"), "Población en riesgo"]
+  };
+  $$(".clave[data-ley]").forEach(function (el) {
+    el.innerHTML = el.dataset.ley.split(",").map(function (k) { return '<span><span class="ico-ly">' + LEY[k][0] + "</span>" + LEY[k][1] + "</span>"; }).join("");
+  });
+  function marca(ll, html, cls, interactivo) {
+    return L.marker(ll, { icon: L.divIcon({ className: "", html: '<span class="' + cls + '">' + html + "</span>", iconSize: [0, 0] }), interactive: interactivo !== false, keyboard: interactivo !== false });
+  }
+  function expuesto(t) { return /ALTO/.test((t || "").toUpperCase()); }
+
+  var C = Y.capas || {};
+  var hayMapa = !!(window.L && C.distrito);
+  if (!hayMapa) $$(".sc-fondo, .tour-mapa").forEach(function (e) { e.classList.add("sin-mapa"); });
+
+  function urlFicha(u) { return u ? encodeURI(u) : ""; }
+  function enlaceFicha(u) { return u ? '<a class="ficha-link" href="' + urlFicha(u) + '" target="_blank" rel="noopener">Ver ficha técnica (PDF) ↗</a>' : ""; }
+  function popupPC(p) {
+    return "<h4>" + esc(p.rio) + " · " + esc(p.sector) + "</h4>" + '<span class="nivel" style="background:' + (COL[p.nivel] || "#888") + '">Riesgo ' + esc((p.nivel || "").toLowerCase()) + "</span>" +
+      "<dl><dt>Ficha</dt><dd>" + esc(p.cod_ana) + "</dd>" + (p.e_viviendas ? "<dt>Viviendas expuestas</dt><dd>" + esc(p.e_viviendas) + "</dd>" : "") +
+      (p.medida_prevencion ? "<dt>Medida</dt><dd>" + esc(p.medida_prevencion) + "</dd>" : "") + "</dl>" + enlaceFicha(p.ficha);
+  }
+  function popupObra(p) {
+    return "<h4>" + esc(p.SECTOR) + "</h4><p style=\"margin:0\">" + esc(p.NOMBRE_DE_) + "</p><dl><dt>Ficha</dt><dd>" + esc(p.CODIGO) + "</dd><dt>Beneficiarios</dt><dd>" + fmt(+p.POB || 0) + "</dd>" +
+      (p.VOLUMEN_M3 ? "<dt>Material</dt><dd>" + fmt(+p.VOLUMEN_M3, 0) + " m³</dd>" : "") + "<dt>Estado</dt><dd>" + esc(p.ESTADO) + "</dd></dl>" + enlaceFicha(p.RUTA);
+  }
+  function capas() {
+    var K = {};
+    K.cuenca = L.geoJSON(C.cuenca, { style: { color: "#fff", weight: 2, dashArray: "6 6", fill: false, opacity: .85 }, interactive: false });
+    K.vecinos = L.geoJSON(C.vecinos, { style: { color: "#fff", weight: 1, opacity: .45, fill: false }, interactive: false });
+    K.distrito = L.geoJSON(C.distrito, { style: { color: "#3FC1CB", weight: 3, fillColor: "#3FC1CB", fillOpacity: .12 }, interactive: false });
+    K.rios = L.geoJSON(C.rios, { style: { color: "#3FA9F5", weight: 3.5, opacity: .95 }, interactive: false });
+    K.faja = L.geoJSON(C.faja, { style: function (f) { var sjm = /Yesera|Tortolita/.test(f.properties.cauce); return { color: "#F2994A", weight: sjm ? 2 : 1, fillColor: "#F2994A", fillOpacity: sjm ? .45 : .2, opacity: sjm ? 1 : .6 }; },
+      onEachFeature: function (f, l) { var p = f.properties; l.bindTooltip("<b>Faja marginal · " + esc(p.cauce) + "</b><br>" + fmt(+p.largo_km, 1) + " km · " + fmt(+p.area_ha, 1) + " ha", { className: "tt", sticky: true }); } });
+    K.ambito = L.geoJSON(C.ambito, { style: { color: "#fff", weight: 2.5, dashArray: "3 6", fill: false }, interactive: false });
+    K.puntos = L.geoJSON(C.puntos_criticos, { pointToLayer: function (f, ll) { return marca(ll, svgTri(f.properties.nivel === "Muy alto" ? SEM.r : SEM.n, 26), "mk tri"); },
+      onEachFeature: function (f, l) { l.bindPopup(popupPC(f.properties)); } });
+    var pobMax = Math.max.apply(null, (C.centros_poblados ? C.centros_poblados.features : []).map(function (f) { return f.properties.pob || 1; }).concat([1]));
+    K.ccpp = L.geoJSON(C.centros_poblados, { pointToLayer: function (f, ll) { return L.circleMarker(ll, { radius: 4 + 16 * Math.sqrt((f.properties.pob || 0) / pobMax), color: "#fff", weight: 1.5, fillColor: expCol(f.properties.exposicion_inundacion), fillOpacity: .88 }); },
+      onEachFeature: function (f, l) { l.bindTooltip("<b>Centro poblado</b><br>" + fmt(f.properties.pob) + " habitantes<br>Exposición " + esc((f.properties.exposicion_inundacion || "").toLowerCase()), { className: "tt" }); } });
+    K.educacion = L.geoJSON(C.educacion, { pointToLayer: function (f, ll) { return marca(ll, svgBadge(AZUL, "colegio", 24, false, expuesto(f.properties.exposicion_inundacion)), "mk"); },
+      onEachFeature: function (f, l) { l.bindTooltip("<b>" + esc(titulo(f.properties.nombre)) + "</b><br>" + esc(f.properties.nivel) + "<br>Exposición " + esc((f.properties.exposicion_inundacion || "").toLowerCase()), { className: "tt" }); } });
+    K.salud = L.geoJSON(C.salud, { pointToLayer: function (f, ll) { return marca(ll, svgBadge(ROSA, "salud", 26, true, expuesto(f.properties.exposicion_inundacion)), "mk"); },
+      onEachFeature: function (f, l) { l.bindTooltip("<b>" + esc(titulo(f.properties.nombre)) + "</b><br>" + esc(f.properties.categoria) + "<br>Exposición " + esc((f.properties.exposicion_inundacion || "").toLowerCase()), { className: "tt" }); } });
+    K.obras = L.geoJSON(C.intervenciones, { pointToLayer: function (f, ll) { return marca(ll, svgBadge("#0E7C86", "obra", 26), "mk"); },
+      onEachFeature: function (f, l) { l.bindPopup(popupObra(f.properties)); } });
+    K.pobv = L.geoJSON(C.poblacion_vulnerable, { pointToLayer: function (f, ll) { return L.circleMarker(ll, { radius: 8 + Math.sqrt(f.properties.N_Hab_en_R || 0) / 2.2, color: "#3FC1CB", weight: 2, fillColor: "#3FC1CB", fillOpacity: .28 }); },
+      onEachFeature: function (f, l) { var p = f.properties; l.bindTooltip("<b>Quebrada " + esc(p.Quebrada) + "</b><br>" + fmt(p.N_Hab_en_R) + " habitantes en riesgo", { className: "tt" }); } });
+    // Nombres de cauces con semáforo: rojo = riesgo muy alto (actuar ya), naranja = riesgo alto (reforzar)
+    var CAUCES = [[-13.9290, -75.6390, "Qda. La Yesera", "r"], [-13.9010, -75.6300, "Qda. Tortolitas", "r"], [-13.9590, -75.6491, "Qda. Yancay", "n"],
+      [-13.8345, -75.6065, "Qda. Huamaní", "n"], [-13.9075, -75.6935, "Qda. La Banda", "n"]];
+    K.cauces = L.layerGroup(CAUCES.map(function (c) { return marca([c[0], c[1]], '<i style="background:' + SEM[c[3]] + '"></i>' + c[2], "pill", false); }));
+    K.lugares = L.layerGroup([marca([-13.9268, -75.6655], "Los Molinos", "lugar-mk", false), marca([-13.9205, -75.6880], "Bocatoma La Achirana", "lugar-mk chico", false)]);
+    K.etqCuenca = L.layerGroup([marca([-14.0678, -75.7286], "Ica", "lugar-mk", false), marca([-13.8700, -75.6100], "San José de Los Molinos", "lugar-mk", false),
+      marca([-14.2000, -75.6200], "Cuenca del río Ica", "lugar-mk mayus", false)]);
+    return K;
+  }
+  // Panel de capas: [clave, nombre, icono, cantidad]
+  function n(fc) { return fc && fc.features ? fc.features.length : 0; }
+  var PANEL = [
+    ["puntos", "Puntos críticos ANA", svgTri(SEM.r, 22), n(C.puntos_criticos)],
+    ["obras", "Obras ANA 2026", svgBadge("#0E7C86", "obra", 22), n(C.intervenciones)],
+    ["faja", "Faja marginal (ANA 2019)", LEY.faja[0], n(C.faja)],
+    ["ambito", "Centro poblado (ámbito)", LEY.ambito[0], n(C.ambito)],
+    ["educacion", "Colegios", svgBadge(AZUL, "colegio", 22), n(C.educacion)],
+    ["salud", "Establecimientos de salud", svgBadge(ROSA, "salud", 22, true), n(C.salud)],
+    ["ccpp", "Centros poblados", svgSimple("circulo", "#9AA3AD", 5), n(C.centros_poblados)],
+    ["pobv", "Población en riesgo", LEY.pobv[0], n(C.poblacion_vulnerable)],
+    ["rios", "Río Ica", LEY.rio[0], n(C.rios)],
+    "-",
+    ["cauces", "Nombres de cauces (semáforo)", svgSimple("pill", SEM.r), 5],
+    ["distrito", "Límite distrital", LEY.distrito[0], n(C.distrito)]
+  ];
+
+  if (hayMapa) (function () {
+    var map = L.map("mapa-sc", { zoomControl: false, scrollWheelZoom: false, dragging: false, touchZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, zoomSnap: 0.25 });
+    base(map);
+    var zc = L.control.zoom({ position: "bottomright" });
+    var K = capas();
+    var bC = K.cuenca.getBounds();
+    var bA = L.latLngBounds([[-13.952, -75.69], [-13.895, -75.60]]);
+    var bP = L.latLngBounds([[-13.975, -75.71], [-13.83, -75.55]]);
+    var pad = movil ? { paddingTopLeft: [20, 70], paddingBottomRight: [20, innerHeight * 0.42] } : { paddingTopLeft: [Math.min(500, innerWidth * 0.4), 70], paddingBottomRight: [40, 40] };
+    var EST = {
+      cuenca: { b: bC, on: ["cuenca", "vecinos", "distrito", "rios", "etqCuenca"] },
+      abanico: { b: bA, on: ["distrito", "rios", "faja", "ambito", "cauces", "lugares"] },
+      puntos: { b: bP, on: ["distrito", "rios", "faja", "puntos", "cauces", "lugares"] },
+      gente: { b: bP, on: ["distrito", "rios", "ccpp", "educacion", "salud", "cauces", "lugares"] },
+      obras: { b: bP, on: ["distrito", "rios", "faja", "pobv", "obras", "cauces", "lugares"] },
+      explorar: { b: bP, on: ["distrito", "rios", "faja", "puntos", "obras", "cauces", "lugares"] }
+    };
+    function mostrar(ids) {
+      Object.keys(K).forEach(function (k) { var on = ids.indexOf(k) >= 0; if (on && !map.hasLayer(K[k])) K[k].addTo(map); if (!on && map.hasLayer(K[k])) map.removeLayer(K[k]); });
+      if (map.hasLayer(K.puntos)) K.puntos.eachLayer(function (m) { m.setZIndexOffset(500); });
+    }
+    var actual = null, inter = false;
+    function interactivo(on) {
+      if (on === inter) return; inter = on;
+      ["dragging", "touchZoom", "doubleClickZoom", "scrollWheelZoom", "boxZoom", "keyboard"].forEach(function (h) { if (map[h]) map[h][on ? "enable" : "disable"](); });
+      if (on) zc.addTo(map); else zc.remove();
+    }
+    function syncCtrl() { $$("#capas-ctrl input").forEach(function (i) { i.checked = map.hasLayer(K[i.value]); }); }
+    function pintarCtrl() {
+      var c = $("#capas-ctrl");
+      if (!c.dataset.listo) {
+        c.dataset.listo = 1;
+        PANEL.forEach(function (d) {
+          if (d === "-") { var sep = document.createElement("div"); sep.className = "ly-sep"; c.appendChild(sep); return; }
+          var l = document.createElement("label");
+          l.innerHTML = '<span class="ico-ly">' + d[2] + "</span><span>" + d[1] + '</span><span class="n">' + d[3] + '</span><input type="checkbox" role="switch" value="' + d[0] + '" aria-label="' + d[1] + '">';
+          $("input", l).addEventListener("change", function (ev) { if (ev.target.checked) K[d[0]].addTo(map); else map.removeLayer(K[d[0]]); if (map.hasLayer(K.puntos)) K.puntos.eachLayer(function (m) { m.setZIndexOffset(500); }); });
+          c.appendChild(l);
+        });
+      }
+      syncCtrl();
+    }
+    function estado(k) {
+      if (k === actual || !EST[k]) return; actual = k; var e = EST[k];
+      mostrar(e.on); map.closePopup();
+      var opts = Object.assign({ duration: reducir ? 0 : 1.6, maxZoom: 15 }, k === "explorar" && !movil ? { paddingTopLeft: [360, 70], paddingBottomRight: [40, 40] } : pad);
+      if (reducir) map.fitBounds(e.b, opts); else map.flyToBounds(e.b, opts);
+      interactivo(k === "explorar");
+      pintarCtrl();
+    }
+    map.fitBounds(bC, pad);
+    estado("cuenca");
+    var obs = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) estado(e.target.dataset.estado); }); }, { rootMargin: "-50% 0px -50% 0px" });
+    $$("#mapa .sc-paso").forEach(function (p) { obs.observe(p); });
+    addEventListener("resize", function () { map.invalidateSize(); });
+  })();
+
+  /* Recorrido guiado: fotos de las fichas técnicas de la ANA, tramos de intervención y enlaces a cada ficha */
+  var RA = "https://snirh.ana.gob.pe/RepositorioPuntoCritico/";
+  function F(cod) { var y = cod.slice(-4); return [cod.split("N° ")[1].slice(0, 9), RA + y + "/" + cod + "-ANA-AAA.CHCH-ALA.I.pdf"]; }
+  var PARADAS = [
+    { n: "Diques 1 a 5", ll: [-13.93179, -75.61361], z: 15, tr: ["0216-2026"], fotos: ["ana0216_dique1", "ana0216_dique4", "ana0216_dique5"],
+      d: [["Riesgo muy alto", 1], ["18&#8239;300 m³ por retirar"]], f: [F("FTR-MC-PREV N° 0216-2026")],
+      t: "Dentro de la quebrada, antes de salir de los cerros, cinco diques frenan el huaico. Hoy están llenos de sedimento: así los fotografió la ANA." },
+    { n: "Diques 6 a 9", ll: [-13.93380, -75.64450], z: 15, tr: ["0217-2026", "0218-2026", "0219-2026"], fotos: ["ana0217_dique7", "ana0218_dique8", "ana0219_dique9"],
+      d: [["Riesgo muy alto", 1], ["484 viviendas expuestas"]], f: [F("FTR-MC-PREV N° 0217-2026"), F("FTR-MC-PREV N° 0218-2026"), F("FTR-MC-PREV N° 0219-2026")],
+      t: "Ya en el abanico, a un kilómetro de las primeras casas. Es la última defensa antes del pueblo, y también está colmatada." },
+    { n: "Quebrada Tortolitas", ll: [-13.90531, -75.62516], z: 15, fotos: ["gore_tortolitas_dron1", "gore_tortolitas_dron2", "m_tortolita_q"],
+      d: [["Riesgo muy alto", 1], ["310 viviendas expuestas"]], f: [F("FTR-MC-PREV N° 0042-2025")],
+      t: "La otra quebrada del distrito, 3 km al norte. Tiene diques de piedra, pero ninguna obra priorizada para 2026." },
+    { n: "Quebrada Yancay", ll: [-13.95330, -75.64910], z: 15, yt: "yt_2025",
+      d: [["Riesgo alto", 1], ["3 puntos críticos"]], f: [F("FTR-CB-PREV N° 0109-2025"), F("FTR-CB-PREV N° 0110-2025"), F("FTR-CB-PREV N° 0111-2025")],
+      t: "Al sur del pueblo. Bajó en febrero de 2024, junto con La Yesera, y otra vez en febrero de 2025." },
+    { n: "Bocatoma La Achirana", ll: [-13.92345, -75.67706], z: 15, tr: ["0164-2025"], fotos: ["ana0164_desborde", "ana0164_parcelas", "achirana_compuertas"],
+      d: [["Riesgo alto", 1], ["17&#8239;000 m³ por retirar"]], f: [F("FTR-MC-PREV N° 0164-2025")],
+      t: "Aquí nace el canal que riega más de 11&#8239;000 ha del valle. En avenidas, el río se desborda en este tramo." },
+    { n: "Casa Blanca · río Ica", ll: [-13.90663, -75.65861], z: 14, tr: ["0153-2026"], fotos: ["ana0153_rio2", "ana0153_rio1"],
+      d: [["Riesgo muy alto", 1], ["6,2 km de bordos"]], f: [F("FTR-CB-PREV N° 0153-2026")],
+      t: "Aquí el peligro es el propio río. La ANA plantea limpiar el cauce y levantar bordos en ambas orillas." }
+  ];
+  var ICO_PDF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 14h6M9 17h4"/></svg>';
+  (function () {
+    var foto = $("#tour-foto"), cuerpo = $("#tour-cuerpo"), dots = $("#tour-puntos"), prev = $("#tour-prev"), next = $("#tour-next");
+    var i = 0, j = 0, map = null, marcas = [], TR = {};
+    PARADAS.forEach(function (p, k) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = k + 1; b.setAttribute("aria-label", "Lugar " + (k + 1) + ": " + p.n);
+      b.addEventListener("click", function () { ir(k); }); dots.appendChild(b);
+    });
+    function tramosDe(p) { return (p.tr || []).map(function (c) { return TR[c]; }).filter(Boolean); }
+    if (hayMapa) {
+      map = L.map("tour-mapa", { zoomControl: true, scrollWheelZoom: false, dragging: !movil, zoomSnap: 0.25 });
+      base(map);
+      L.geoJSON(C.faja, { style: { color: "#F2994A", weight: 1.5, fillColor: "#F2994A", fillOpacity: .25 }, interactive: false }).addTo(map);
+      L.geoJSON(C.rios, { style: { color: "#3FA9F5", weight: 3, opacity: .85 }, interactive: false }).addTo(map);
+      // Tramos de intervención de la ANA: finos en reposo, gruesos y rojos en la parada activa
+      (C.tramos ? C.tramos.features : []).forEach(function (f) {
+        var cod = (f.properties.CODIGO.match(/N° (\d{4}-\d{4})/) || [])[1]; if (!cod) return;
+        var fondo = L.geoJSON(f, { style: { color: "#fff", weight: 0, opacity: 0 }, interactive: false }).addTo(map);
+        var linea = L.geoJSON(f, { style: { color: "#E8231F", weight: 3, opacity: .55, dashArray: "6 6" } }).addTo(map);
+        linea.bindTooltip("<b>Tramo de intervención · " + esc(f.properties.SECTOR) + "</b><br>" + fmt(+f.properties.META || 0, 2) + " km · " + esc(f.properties.ESTADO), { className: "tt", sticky: true });
+        TR[cod] = { fondo: fondo, linea: linea, f: f };
+      });
+      PARADAS.forEach(function (p, k) {
+        var t = tramosDe(p);
+        if (t.length) { var cs = t[0].f.geometry.coordinates; var c = cs[Math.floor(cs.length / 2)]; p.ll = [c[1], c[0]]; }
+        var mk = L.marker(p.ll, { icon: L.divIcon({ className: "", html: '<div class="num-marca">' + (k + 1) + "</div>", iconSize: [34, 34], iconAnchor: [17, 17] }), title: p.n, keyboard: true });
+        mk.on("click", function () { ir(k); }); mk.addTo(map); marcas.push(mk);
+      });
+      map.fitBounds(L.latLngBounds(PARADAS.map(function (p) { return p.ll; })), { padding: [40, 40] });
+    }
+    function pintarFoto(p) {
+      var id = p.fotos[j];
+      var n = p.fotos.length;
+      foto.innerHTML = '<img data-m="' + id + '" alt="">' + '<span class="chip">' + (p.chip || MEDIOS[id].titulo) + "</span>" +
+        (n > 1 ? '<button type="button" class="f-flecha izq" data-d="-1" aria-label="Foto anterior">‹</button><button type="button" class="f-flecha der" data-d="1" aria-label="Foto siguiente">›</button>' +
+          '<span class="f-cuenta">' + (j + 1) + " / " + n + "</span>" + '<span class="f-puntos" aria-hidden="true">' + p.fotos.map(function (_, k) { return '<i class="' + (k === j ? "on" : "") + '"></i>'; }).join("") + "</span>" : "");
+      var im = $("img", foto); cargarImg(im); im.style.cursor = "zoom-in";
+      im.addEventListener("click", function () { abrirVisor(p.fotos.map(function (x) { return MEDIOS[x].ampliar || x; }), j); });
+      $$(".f-flecha", foto).forEach(function (b) { b.addEventListener("click", function () { j = (j + +b.dataset.d + n) % n; pintarFoto(p); }); });
+    }
+    function ir(k, sinMover) {
+      i = Math.max(0, Math.min(PARADAS.length - 1, k)); j = 0; var p = PARADAS[i];
+      if (p.yt) { foto.innerHTML = '<div class="yt" data-yt="' + p.yt + '"></div>'; yt($(".yt", foto)); }
+      else pintarFoto(p);
+      cuerpo.innerHTML = '<div class="kicker"><b>' + (i + 1) + "</b>Lugar " + (i + 1) + " de " + PARADAS.length + "</div><h3>" + p.n + "</h3>" +
+        '<div class="datos-t">' + (p.d || []).map(function (x) { return '<span class="' + (x[1] ? "rojo" : "") + '">' + x[0] + "</span>"; }).join("") + "</div><p>" + p.t + "</p>" +
+        (p.f ? '<div class="fichas-ana">' + p.f.map(function (x) { return '<a href="' + encodeURI(x[1]) + '" target="_blank" rel="noopener" title="Ficha técnica de la ANA (PDF)">' + ICO_PDF + "Ficha " + x[0] + " ↗</a>"; }).join("") + "</div>" : "");
+      $$("button", dots).forEach(function (b, k2) { b.classList.toggle("on", k2 === i); b.setAttribute("aria-current", k2 === i ? "step" : "false"); });
+      prev.disabled = i === 0; next.disabled = i === PARADAS.length - 1;
+      if (map) {
+        marcas.forEach(function (m, k2) { var el = m.getElement(); if (el) $(".num-marca", el).classList.toggle("on", k2 === i); m.setZIndexOffset(k2 === i ? 1000 : 0); });
+        Object.keys(TR).forEach(function (c) {
+          var on = (p.tr || []).indexOf(c) >= 0;
+          TR[c].fondo.setStyle({ weight: on ? 9 : 0, opacity: on ? .9 : 0 });
+          TR[c].linea.setStyle({ weight: on ? 5 : 3, opacity: on ? 1 : .55, dashArray: on ? null : "6 6" });
+          if (on) { TR[c].fondo.bringToFront(); TR[c].linea.bringToFront(); }
+        });
+        if (!sinMover) {
+          var t = tramosDe(p);
+          if (t.length) {
+            var bb = L.latLngBounds([]); t.forEach(function (x) { bb.extend(x.linea.getBounds()); });
+            var op = { padding: [70, 70], maxZoom: 16, duration: reducir ? 0 : 1.4 };
+            if (reducir) map.fitBounds(bb, op); else map.flyToBounds(bb, op);
+          } else if (reducir) map.setView(p.ll, p.z); else map.flyTo(p.ll, p.z, { duration: 1.4 });
+        }
+      }
+    }
+    prev.addEventListener("click", function () { ir(i - 1); });
+    next.addEventListener("click", function () { ir(i + 1); });
+    var x0 = null;
+    foto.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    foto.addEventListener("touchend", function (e) {
+      var p = PARADAS[i]; if (x0 == null || !p.fotos || p.fotos.length < 2) return;
+      var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 45) { j = (j + (dx < 0 ? 1 : -1) + p.fotos.length) % p.fotos.length; pintarFoto(p); }
+    });
+    ir(0, true);
+    if (map) new IntersectionObserver(function (es, o) { if (es[0].isIntersecting) { o.disconnect(); map.invalidateSize(); ir(i); } }, { threshold: 0.4 }).observe($(".tour"));
+  })();
+
+  /* 8. Cronología */
+  var HITOS = [
+    { f: "Febrero de 1998", i: "ola", g: 1, t: "El Niño extraordinario", p: "El río Ica llega a 600–650 m³/s. En Ica se destruyen unas 4&#8239;300 viviendas." },
+    { f: "Enero de 2015", i: "lluvia", t: "Agua en las calles", yt: "yt_2015", p: "La municipalidad graba el distrito inundado." },
+    { f: "25 de enero de 2017", i: "huaico", g: 1, t: "El dique no aguanta", yt: "yt_2017", p: "La Yesera supera las defensas: <b>985 viviendas afectadas</b> y 1&#8239;695 damnificados en el distrito." },
+    { f: "2019", i: "regla", t: "La faja marginal", p: "La ANA delimita la franja de La Yesera y Tortolita donde no se debe construir." },
+    { f: "Marzo de 2023", i: "ciclon", g: 1, t: "Ciclón Yaku", yt: "yt_2023", p: "Los diques 1 y 2 contienen parte del flujo; las galerías filtrantes quedan destruidas." },
+    { f: "Febrero de 2024", i: "huaico", g: 1, t: "Dos quebradas a la vez", yt: "yt_2024", p: "Bajan La Yesera y Yancay. Barro en Los Cerrillos y Pampa de La Isla." },
+    { f: "Febrero de 2025", i: "huaico", t: "Otra vez Yancay", p: "Tercer verano seguido con huaicos." },
+    { f: "2026", i: "pala", t: "Diques por limpiar", p: "Cuatro intervenciones priorizadas en La Yesera. Ninguna ejecutada aún." },
+    { f: "Octubre de 2026", i: "alerta", hoy: 1, t: "Alerta de El Niño costero", p: "El ENFEN prevé un calentamiento extraordinario hasta febrero de 2027." }
+  ];
+  (function () {
+    var cont = $("#linea");
+    HITOS.forEach(function (h) {
+      var d = document.createElement("article");
+      d.className = "hito" + (h.g ? " grave" : "") + (h.hoy ? " hoy" : "");
+      d.innerHTML = '<div class="icono">' + icono(h.i) + '</div><div class="caja"><div class="fecha">' + h.f + "</div><h3>" + h.t + "</h3><p>" + h.p + "</p>" +
+        (h.yt ? '<div class="medio"><div class="yt" data-yt="' + h.yt + '"></div></div>' : "") + "</div>";
+      cont.appendChild(d);
+    });
+    var obs = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("visto"); obs.unobserve(e.target); } }); }, { rootMargin: "0px 0px -12% 0px" });
+    $$(".hito", cont).forEach(function (h) { obs.observe(h); });
+  })();
+  $$("[data-yt]").forEach(yt);
+
+  /* 9. Fotos a pantalla completa */
+  (function () {
+    var show = $("#show"), lams = $$(".lam", show), barras = $(".barras", show), cont = $(".contador", show), i = 0;
+    lams.forEach(function (l, k) { var b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", "Ir a la imagen " + (k + 1)); b.addEventListener("click", function () { ir(k); }); barras.appendChild(b); });
+    function ir(k) {
+      i = (k + lams.length) % lams.length;
+      lams.forEach(function (l, k2) { l.classList.toggle("on", k2 === i); l.setAttribute("aria-hidden", k2 !== i); });
+      $$("button", barras).forEach(function (b, k2) { b.classList.toggle("on", k2 === i); });
+      cont.textContent = (i + 1) + " / " + lams.length;
+    }
+    $$(".ctrl .flecha", show).forEach(function (b) { b.addEventListener("click", function () { ir(i + +b.dataset.dir); }); });
+    show.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") ir(i + 1); if (e.key === "ArrowLeft") ir(i - 1); });
+    var x0 = null;
+    show.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    show.addEventListener("touchend", function (e) { if (x0 == null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) ir(i + (dx < 0 ? 1 : -1)); x0 = null; });
+    ir(0);
+  })();
+
+  /* 10. Cifras animadas, isotipo, emergencias por año */
+  (function () {
+    var obs = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return; obs.unobserve(e.target);
+        var el = e.target, fin = ruta(S, el.dataset.cuenta); if (typeof fin !== "number") return;
+        if (reducir) { el.textContent = fmt(fin); return; }
+        var t0 = null;
+        (function paso(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1400); k = 1 - Math.pow(1 - k, 3); el.textContent = fmt(Math.round(fin * k)); if (k < 1) requestAnimationFrame(paso); })(performance.now());
+      });
+    }, { threshold: 0.6 });
+    $$("[data-cuenta]").forEach(function (el) { obs.observe(el); });
+    var n = Math.round(S.pct_expuesta || 96), h = "";
+    var persona = '<path d="M12 2.5a3.2 3.2 0 1 1 0 6.4 3.2 3.2 0 0 1 0-6.4zM7.2 11h9.6l-1 9.5h-2.4l-.6-6h-1.6l-.6 6H8.2z" fill="currentColor"/>';
+    for (var k = 0; k < 100; k++) h += '<svg viewBox="0 0 24 24" class="' + (k >= n ? "gris" : "") + '" style="transition-delay:' + (k * 12) + 'ms">' + persona + "</svg>";
+    $("#gente-iso").innerHTML = h;
+    new IntersectionObserver(function (es, o) { if (es[0].isIntersecting) { $("#isotipo").classList.add("visto"); o.disconnect(); } }, { threshold: 0.35 }).observe($("#isotipo"));
+    var an = (S.indeci && S.indeci.anios) || { "2005": 1, "2006": 2, "2011": 1, "2012": 2, "2013": 2, "2014": 2, "2017": 4, "2019": 2, "2020": 2 };
+    var W = 1100, H = 190, ml = 10, mb = 26, mt = 18, n0 = 2003, n1 = 2020, cw = (W - ml) / (n1 - n0 + 1), mx = 4;
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Emergencias por año en San José de Los Molinos, 2003 a 2020">';
+    for (var a = n0; a <= n1; a++) {
+      var v = an[a] || 0, x = ml + (a - n0) * cw, hh = (H - mt - mb) * v / mx, y = H - mb - hh;
+      s += '<rect x="' + (x + cw * .18) + '" y="' + y + '" width="' + cw * .64 + '" height="' + Math.max(hh, v ? 0 : 1.5) + '" rx="3" fill="' + (a === 2017 ? "#C23B3B" : v ? "#0E7C86" : "#DCE3E6") + '"><title>' + a + ": " + v + " emergencias</title></rect>";
+      if (v) s += '<text class="val" x="' + (x + cw / 2) + '" y="' + (y - 6) + '" text-anchor="middle">' + v + "</text>";
+      s += '<text x="' + (x + cw / 2) + '" y="' + (H - 6) + '" text-anchor="middle">' + (movil ? "’" + String(a).slice(2) : a) + "</text>";
+    }
+    $("#graf-anios").innerHTML = s + "</svg>";
+  })();
+
+  /* 11. Créditos */
+  (function () {
+    function li(t, a, lic, url) {
+      return '<li><span class="t">' + (url ? '<a href="' + url + '" target="_blank" rel="noopener">' + t + "</a>" : t) + '</span><span class="a">' + a + "</span>" + (lic ? '<span class="lic">' + lic + "</span>" : "") + "</li>";
+    }
+    var DATOS = [
+      ["Límites, centros poblados y población", "INEI, Censo 2017"],
+      ["Exposición a inundaciones", "CENEPRED"],
+      ["Puntos críticos y fajas marginales", "ANA · AAA Chaparra-Chincha · ALA Ica"],
+      ["Intervenciones 2026 y población vulnerable", "ANA"],
+      ["Colegios y centros de salud", "MINEDU (ESCALE) · MINSA (RENIPRESS)"],
+      ["Emergencias 2003–2020", "INDECI"],
+      ["Caudal del río Ica", "CAMELS-PE, estación Los Molinos"],
+      ["Ámbito del centro poblado", "SIGRID-CENEPRED, documento 1183"],
+      ["Mapa base", "Esri World Imagery · Leaflet"]
+    ];
+    $("#cred-datos").innerHTML = DATOS.map(function (d) { return li(d[0], d[1]); }).join("");
+    var mapas = [], fotos = [], videos = [];
+    Object.keys(MEDIOS).forEach(function (id) {
+      var m = MEDIOS[id];
+      if (m.tipo === "mapa") mapas.push(li(m.titulo, m.autor.split(",")[0] + (m.fecha ? " · " + m.fecha : ""), "", m.fuente));
+      else if (m.tipo === "foto") fotos.push(li(m.titulo, m.autor + (m.lugar ? " · " + m.lugar : ""), m.licencia, m.fuente));
+      else if (m.tipo === "video") videos.push(li(m.titulo, m.autor, m.licencia, m.fuente));
+      else if (m.tipo === "youtube") videos.push(li(m.titulo, m.autor + " · " + m.fecha, "YouTube", "https://www.youtube.com/watch?v=" + m.id));
+    });
+    $("#cred-mapas").innerHTML = mapas.join(""); $("#cred-fotos").innerHTML = fotos.join(""); $("#cred-videos").innerHTML = videos.join("");
+    var REFS = [
+      ["Alerta de El Niño costero", "ENFEN, Comunicado Oficial N° 19-2026 (30 oct. 2026)", "https://enfen.imarpe.gob.pe/comunicados/"],
+      ["Crecida de 1998 en el río Ica", "CIP Ica · Universidad Nacional San Luis Gonzaga"],
+      ["Lluvia +250 % durante El Niño", "CENEPRED · SENAMHI, Informe Técnico N° 69-2026"],
+      ["Escenarios de susceptibilidad", "CENEPRED, escenario de riesgo ante lluvias de El Niño (2026)"],
+      ["Huaico de enero de 2017", "INDECI, base de datos de emergencias y daños"],
+      ["Diques y galerías tras el ciclón Yaku (2023)", "Salud con Lupa"],
+      ["Huaicos de 2024 en La Yesera y Yancay", "COEN-INDECI, Reporte N° 379"],
+      ["80 % de viviendas alcanzables", "Expediente técnico de diques de La Yesera (2014), SIGRID-CENEPRED"],
+      ["Faja marginal de La Yesera y Tortolita", "ANA, RD 2070 y 2063-2019-ANA-AAA-CH.CH."],
+      ["Población en riesgo por quebrada", "ANA, mapa de ubicación 09 (2016)"],
+      ["Diques y obras priorizadas", "ANA, intervenciones priorizadas FEN 2026-2027"],
+      ["Fichas técnicas de puntos críticos (fotos y datos del recorrido)", "ANA, Sistema Nacional de Información de Recursos Hídricos (SNIRH)", "https://snirh.ana.gob.pe/"],
+      ["Riego de La Achirana", "INEI, Conociendo Ica"]
+    ];
+    $("#cred-refs").innerHTML = REFS.map(function (r) { return li(r[0], r[1], "", r[2]); }).join("");
+  })();
+
+  /* 12. Mayu */
+  window.MAYU = (function () {
+    function svg(size) {
+      return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 64 64" aria-hidden="true">' +
+        '<line x1="32" y1="12" x2="32" y2="5.5" stroke="var(--mayu)" stroke-width="2.4" stroke-linecap="round"/>' +
+        '<path d="M32 0.8c-1.6 2.4-3.1 3.9-3.1 5.4a3.1 3.1 0 0 0 6.2 0c0-1.5-1.5-3-3.1-5.4z" fill="var(--mayu-2)"/>' +
+        '<path d="M32 9.5C25 18 11.5 29.5 11.5 41.5a20.5 20.5 0 0 0 41 0C52.5 29.5 39 18 32 9.5z" fill="var(--mayu)"/>' +
+        '<path d="M20.5 30.5c2.6-4.7 6-8.6 8.7-11.6" fill="none" stroke="var(--mayu-2)" stroke-width="2.6" stroke-linecap="round" opacity=".75"/>' +
+        '<circle cx="11.6" cy="42" r="2.6" fill="var(--mayu-2)"/><circle cx="52.4" cy="42" r="2.6" fill="var(--mayu-2)"/>' +
+        '<rect x="18" y="32" width="28" height="18" rx="9" fill="var(--mayu-visor)"/>' +
+        '<rect class="eye" x="23.6" y="36" width="5.2" height="8.4" rx="2.6" fill="var(--mayu-eye)"/>' +
+        '<rect class="eye" x="35.2" y="36" width="5.2" height="8.4" rx="2.6" fill="var(--mayu-eye)"/>' +
+        '<path class="mouth" d="M29.2 47.1q2.8 1.5 5.6 0" fill="none" stroke="var(--mayu-eye)" stroke-width="1.5" stroke-linecap="round"/></svg>';
+    }
+    $$(".mayu-av[data-mayu]").forEach(function (el) { el.innerHTML = svg(+el.dataset.mayu); });
+    var raiz = $("#mayu"), fab = $("#mayu-fab"), log = $("#mayu-log"), chips = $("#mayu-chips"), inp = $("#mayu-in"), donde = $("#mayu-donde");
+    var abierto = false, sec = "", saludo = false;
+    var SECC = {
+      mapa: ["El lugar", "Baja despacio: el mapa cambia con cada tarjeta. Al final puedes explorarlo tú."],
+      quebrada: ["La quebrada", "Toca la imagen para ver el mapa completo de la ANA."],
+      nino: ["El Niño", "La animación muestra cada Niño desde 1950."],
+      comparar: ["Peligros", "Arrastra la barra y cambia entre inundaciones y movimientos en masa."],
+      recorrido: ["Recorrido", "Usa las flechas o toca los números del mapa."],
+      historia: ["Historia", "Cada video abre en YouTube."],
+      huaico: ["Después", "Pasa las fotos con las flechas o deslizando el dedo."],
+      gente: ["La gente", "Cada figura es 1 de cada 100 habitantes del distrito."],
+      preparate: ["Prepárate", "Comparte esta sección con tu familia."],
+      creditos: ["Créditos", "Aquí están todas las fuentes y licencias."]
+    };
+    var FAQ = [
+      { k: ["huaico", "lodo", "flujo"], q: "¿Qué es un huaico?", a: "Un flujo rápido de agua, lodo y piedras que baja por una quebrada cuando llueve fuerte en su parte alta. Llega en minutos." },
+      { k: ["nino", "niño", "enfen", "costero", "alerta"], q: "¿Qué es El Niño costero?", a: "El calentamiento del mar frente a Perú y Ecuador. Trae lluvias fuertes a la costa. Hoy el ENFEN mantiene la <b>alerta</b>. <a href=\"#nino\">Ver</a>." },
+      { k: ["movimiento", "masa", "deslizamiento"], q: "¿Qué es un movimiento en masa?", a: "Cuando tierra, rocas o lodo se desplazan cuesta abajo: huaicos, deslizamientos y derrumbes. <a href=\"#comparar\">Compáralo</a>." },
+      { k: ["faja", "marginal", "construir"], q: "¿Qué es la faja marginal?", a: "La franja junto al cauce reservada para el paso del agua. No se debe construir ni botar desmonte ahí." },
+      { k: ["hacer", "evacu", "mochila", "emergencia", "prepar", "ruta"], q: "¿Qué hago si viene un huaico?", a: "Sube a una zona alta, lejos del cauce, sin esperar a ver el agua. Llama al <b>115</b> o al <b>105</b>. <a href=\"#preparate\">Más</a>." },
+      { k: ["dique", "obra", "limpieza", "2026"], q: "¿Qué obras hay previstas?", a: "La ANA priorizó la limpieza de los diques 1 a 9 de La Yesera para " + fmt(S.yesera_beneficiarios || 4502) + " beneficiarios. Siguen «por ejecutar»." },
+      { k: ["dato", "fuente", "licencia", "credito"], q: "¿De dónde salen los datos?", a: "De la ANA, CENEPRED, INEI, INDECI, ENFEN y otras instituciones. Todo está en <a href=\"#creditos\">los créditos</a>." }
+    ];
+    function msg(html, yo) {
+      var p = document.createElement("div"); p.className = "msg" + (yo ? " yo" : ""); p.innerHTML = html; log.appendChild(p); log.scrollTop = log.scrollHeight;
+      if (!yo) { var av = $(".mayu-cab .mayu-av"); av.classList.remove("talk"); void av.offsetWidth; av.classList.add("talk"); }
+    }
+    function indice() {
+      return "El relato:<ol>" + [["#mapa", "El lugar"], ["#quebrada", "La quebrada"], ["#nino", "El Niño"], ["#comparar", "Dos peligros"], ["#recorrido", "Recorrido"], ["#historia", "Historia"], ["#huaico", "Después"], ["#gente", "La gente"], ["#preparate", "Prepárate"]]
+        .map(function (x) { return '<li><a href="' + x[0] + '">' + x[1] + "</a></li>"; }).join("") + "</ol>";
+    }
+    function sinTilde(t) { return t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+    function responder(t) {
+      var n = sinTilde(t);
+      if (/indice|secciones|capitulos|menu/.test(n)) return indice();
+      var mejor = null, pts = 0;
+      FAQ.forEach(function (f) { var p = 0; f.k.forEach(function (k) { if (n.indexOf(sinTilde(k)) >= 0) p += k.length; }); if (p > pts) { pts = p; mejor = f; } });
+      return mejor ? mejor.a : "No tengo esa respuesta. Prueba con <i>huaico</i>, <i>El Niño</i>, <i>faja</i>, <i>obras</i> o pide el <i>índice</i>.";
+    }
+    function preguntar(t) { msg(esc(t), true); setTimeout(function () { msg(responder(t)); }, reducir ? 0 : 280); }
+    ["Índice"].concat(FAQ.slice(0, 5).map(function (f) { return f.q; })).forEach(function (q) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = q; b.addEventListener("click", function () { preguntar(q); }); chips.appendChild(b);
+    });
+    function abrir(on) {
+      abierto = on; raiz.classList.toggle("abierto", on); fab.setAttribute("aria-expanded", on); fab.classList.remove("late");
+      if (on && !saludo) { saludo = true; msg("¡Hola! Soy <b>Mayu</b>. " + (SECC[sec] ? SECC[sec][1] : "Pregúntame lo que quieras sobre La Yesera.")); }
+      if (on && !movil) setTimeout(function () { inp.focus(); }, 50);
+    }
+    fab.addEventListener("click", function () { abrir(!abierto); });
+    $("#mayu-cerrar").addEventListener("click", function () { abrir(false); fab.focus(); });
+    $("#mayu-form").addEventListener("submit", function (e) { e.preventDefault(); var t = inp.value.trim(); if (!t) return; inp.value = ""; preguntar(t); });
+    log.addEventListener("click", function (e) { if (e.target.closest("a[href^='#']") && movil) abrir(false); });
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && abierto && !visor.classList.contains("on")) abrir(false); });
+    setTimeout(function () { if (!abierto) fab.classList.add("late"); }, 6000);
+    return { seccion: function (id) { if (!SECC[id] || id === sec) return; sec = id; donde.textContent = "Estás en: " + SECC[id][0]; if (abierto) msg(SECC[id][1]); } };
+  })();
+})();
+</script>
+</body>
+</html>
